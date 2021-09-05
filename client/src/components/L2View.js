@@ -113,13 +113,14 @@ class L2View extends Component {
         }
         //POLYGON
 
-      const networkData = await SupportChildren.networks[networkId]
+      const networkData = await SupportChildren.networks[config.l2.ETHEREUM_CHAINID]
       if(networkData) {
           const abi = SupportChildren.abi
           const address = networkData.address
           const contractWeb3 = new web3.eth.Contract(abi, address)
 
           this.setState({contract: contractWeb3})
+          console.log(contractWeb3)
 
           const campaignsContract = await contractWeb3.methods.getCampaigns().call()
           const indices = []
@@ -191,7 +192,7 @@ class L2View extends Component {
     burnEther = async () => {
       console.log("burnEther")
       const maticPoSClient = this.posClientChild();
-      const x = this.state.inputBurn * 1000000000000000000; //TODO inputValue
+      const x = 0.2 * 1000000000000000000; //TODO inputValue
       const x1 = x.toString();
       await maticPoSClient
           .burnERC20(config.l2.posWETH, x1, {
@@ -208,7 +209,7 @@ class L2View extends Component {
       console.log("exitEther, burnHash: " + this.state.inputWithdraw)
       const maticPoSClient = this.posClientParent();
       await maticPoSClient
-          .exitERC20("0xa715236ac6edc6e0e6dc2ef4e305218e5cea469221cec6f9d71f5ad422652a01", {
+          .exitERC20(this.state.inputWithdraw, {
               from: this.state.account,
           })
           .then((res) => {
@@ -244,11 +245,11 @@ class L2View extends Component {
                     <select className = 'form-select' onChange = {evt => this.setState({selectedCampaign: evt.target.value})}>
                       <option>Pick your campaign</option>
                         {this.state.usersCampaigns.map((campaign) => (
-                          <option key = {campaign.camp_id} value = {campaign.camp_l2Raised}>{campaign.camp_title}</option>
+                          <option key = {campaign.camp_id} value = {campaign.camp_l2raised}>{campaign.camp_title}</option>
                         ))}
                     </select>
                     <div  style = {{display: "flex", marginLeft: '60px', marginTop: '20px'}}>
-                      <input className = 'form-control' type = "number" step = "0.0000001" placeholder = {this.state.selectedCampaign.camp_l2Raised} onChange = {evt => this.setState({inputBurn: evt.target.value})} disabled/>
+                      <input className = 'form-control' type = "number" step = "0.0000001" placeholder = {this.state.selectedCampaign} onChange = {evt => this.setState({inputBurn: evt.target.value})} disabled/>
                       <select id="kripto" onChange = {evt => this.setState({currencyBurn: evt.target.value})}>
                         <option value="0x0000000000000000000000000000000000000000">ETH</option>
                         <option value="0x6b175474e89094c44da98b954eedeac495271d0f">DAI</option>
@@ -257,7 +258,7 @@ class L2View extends Component {
                         <option value="0xa117000000f279d81a1d3cc75430faa017fa5a2e">ANT</option>
                       </select>
                     </div>
-                    <button className = "burnBtn" onClick={this.burnEther} disabled={this.state.Networkid !== 0 && this.state.Networkid === config.l2.ETHEREUM_CHAINID}>Burn</button>
+                    <button className = "burnBtn" onClick={this.burnEther} onChange = {evt => this.setState({inputBurn: this.state.selectedCampaign})} disabled={this.state.Networkid !== 0 && this.state.Networkid === config.l2.ETHEREUM_CHAINID}>Burn</button>
                     <p style = {{textAlign: 'left', marginLeft: '90px', marginTop: '20px'}}>Burn hash: {this.state.burnHash}</p>
                   </div>
                   <div className = "withdrawBox">

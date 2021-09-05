@@ -83,7 +83,7 @@ app.put("/campaigns/:id", async (req, res) =>{
 app.put("/campaigns/layer2/:id", async(req, res) =>{
     try {
         const {id} = req.params;
-        const { rasied } = req.body;
+        const { raised } = req.body;
         const donate = await pool.query(
             "UPDATE campaigns SET camp_l2Raised = $1 WHERE camp_id = $2",
             [raised, id]

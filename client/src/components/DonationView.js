@@ -5,6 +5,14 @@ import SupportChildren from "../abis/SupportChildren.json";
 import IERC20 from '../abis/IERC20.json';
 import NFT from '../abis/NFT.json';
 import {tokenName, getCampaign} from "../utils";
+import WalletConnectProvider from "@maticnetwork/walletconnect-provider";
+
+const config = require("../config");
+
+
+const MaticPoSClient = require("@maticnetwork/maticjs").MaticPOSClient;
+const Network = require("@maticnetwork/meta/network");
+const Matic = require("@maticnetwork/maticjs");
 
 
 class App extends Component{
@@ -21,7 +29,10 @@ class App extends Component{
           email: '',
           currency: '0x0000000000000000000000000000000000000000',
           path: '',
-          receipt: ''
+          receipt: '',
+          maticProvider: '',
+          ethereumProvider: '',
+          donoSwitch: ''
         }
       }
     
@@ -42,6 +53,26 @@ class App extends Component{
       }
     
       async loadBlockchainData() {
+
+        const maticProvider = new WalletConnectProvider({
+            host: config.l2.MATIC_RPC,
+            callbacks: {
+                onConnect: console.log("matic connected"),
+                onDisconnect: console.log("matic disconnected!"),
+            },
+        });
+
+        const ethereumProvider = new WalletConnectProvider({
+            host: config.l2.ETHEREUM_RPC,
+            callbacks: {
+                onConnect: console.log("mainchain connected"),
+                onDisconnect: console.log("mainchain disconnected"),
+            },
+        });
+
+        this.setState({maticProvider: maticProvider, ethereumProvider: ethereumProvider})
+
+
         const web3 = window.web3
         // Load accoun
         const accountWeb3 = await web3.eth.getAccounts()
@@ -76,6 +107,8 @@ class App extends Component{
                 path: util[1]
             })
 
+            console.log(this.state.campaign.camp_l2raised)
+
 
             const camp = await contractWeb3.methods.getCampaign(parseInt(this.state.campaign.camp_id)-1).call()
 
@@ -98,14 +131,69 @@ class App extends Component{
         }
       }
 
+    posClientParent () {
+        return new MaticPoSClient({
+            network: config.l2.NETWORK,
+            version: config.l2.VERSION,
+            maticProvider: this.state.maticProvider,
+            parentProvider: window.web3,
+            parentDefaultOptions: {from: this.state.account},
+            maticDefaultOptions: {from: this.state.account},
+        });
+    };
+
+    posClientChild (){
+        return new MaticPoSClient({
+            network: config.l2.NETWORK,
+            version: config.l2.VERSION,
+            maticProvider: window.web3,
+            parentProvider: this.state.ethereumProvider,
+            parentDefaultOptions: {from: this.state.account},
+            maticDefaultOptions: {from: this.state.account},
+        });
+    };
+
 
     donateSwitch = (evt) => {
-        if(this.state.currency == "0x0000000000000000000000000000000000000000"){
-            this.donateETH(evt)
+        evt.preventDefault()
+        if(this.state.donoSwitch == 'mainnet'){
+            if(this.state.currency == "0x0000000000000000000000000000000000000000"){
+                this.donateETH(evt)
+            }else{
+                this.donateERC(evt)
+            }
         }else{
-            this.donateERC(evt)
+            if(this.state.currency == "0x0000000000000000000000000000000000000000"){
+                this.depositEther()
+            }else{
+                // this.depositERC20Poly(evt)
+            }
         }
     }
+
+    depositEther = async () => {
+        console.log("depositEther")
+        const maticPoSClient = this.posClientParent();
+        const x = this.state.amount * 1000000000000000000; // 18 decimals //TODO inputValue
+        const x1 = x.toString();
+  
+        await maticPoSClient.depositEtherForUser(this.state.campaignBC.beneficiary, x1, {
+            from: this.state.account,
+        }).then(async () => {
+            try {
+                const raised = parseFloat(this.state.campaign.camp_l2raised) + parseFloat(this.state.amount)
+                console.log(raised)
+                const body = {raised : raised}
+                const response = await fetch(`http://localhost:5000/campaigns/layer2/${this.state.campaign.camp_id}`, {
+                    method: "PUT",
+                    headers: {"Content-Type" : "application/json"},
+                    body: JSON.stringify(body)
+                });
+            } catch (err) {
+                console.log(err.message)
+            }
+        })
+      };
 
     donateERC = async (evt) =>{
         evt.preventDefault()
@@ -206,9 +294,12 @@ class App extends Component{
                 <p>THANK YOU FOR DONATING:</p>
                 <a>{this.state.campaign.camp_title}</a>
                 </div>
-                {this.state.campaignBC}
             </div>
             </div>
+            <select className = "form-select" onChange = {evt => this.setState({donoSwitch: evt.target.value})}>
+                <option value = 'mainnet'>Ethereum MAINNET</option>
+                <option value = 'polygon'>Polygon(MATIC)</option>
+            </select>
             <div>
             <div className="enterText">
             <a>ENTER AMOUNT</a>
