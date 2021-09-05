@@ -18,6 +18,21 @@ const CUSDC = "0x39AA39c021dfbaE8faC545936693aC917d5E7563"
 const CWBTC = "0xccF4429DB6322D5C611ee964527D42E5d685DD6a"
 const CETH = "0x4Ddc2D193948926D02f9B1fE9e1daa0718270ED5"
 
+const l2 = {
+    "posRootERC20": "0x655F2166b0709cd575202630952D71E2bB0d61Af",
+    "posChildERC20": "0xfe4F5145f6e09952a5ba9e956ED0C25e3Fa4c7F1",
+    "posWETH": "0xa6fa4fb5f76172d178d61b04b0ecd319c5d1c0aa",
+    "rootChainWETH": "0x60D4dB9b534EF9260a88b0BED6c486fe13E604Fc",
+    "plasmaWETH": "0x4DfAe612aaCB5b448C12A591cD0879bFa2e51d62",
+    "plasmaRootERC20": "0x3f152B63Ec5CA5831061B2DccFb29a874C317502",
+    "plasmaChildERC20": "0x2d7882beDcbfDDce29Ba99965dd3cdF7fcB10A1e",
+    "MATIC_RPC": "https://rpc-mumbai.matic.today",
+    "ETHEREUM_RPC": "https://goerli.infura.io/v3/10792650c88f4b4b9636a1ec6054ad74",
+    "VERSION": "mumbai",
+    "NETWORK": "testnet",
+    "MATIC_CHAINID": 80001,
+    "ETHEREUM_CHAINID": 5
+}
 module.exports = {
     DAI,
     USDC,
@@ -34,4 +49,5 @@ module.exports = {
     CUSDC,
     CWBTC,
     CETH,
+    l2
 }

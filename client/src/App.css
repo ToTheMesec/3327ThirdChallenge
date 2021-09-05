@@ -1747,3 +1747,72 @@ ol{
 	font-size: 30px;
 	font-family: 'Bebas Neue';
 }
+
+.depositBox{
+    font-family: 'Bebas Neue';
+    -webkit-box-shadow: 0px -1px 25px -4px rgba(0,0,0,0.37); 
+    box-shadow: 0px -1px 25px -4px rgba(0,0,0,0.37);
+    width: 540px;
+    height: 208px;
+    padding: 20px;
+    border-radius: 12px;
+    text-align: center;
+}
+
+.depositBox input {
+    width: 231px;
+}
+
+
+.withdrawBox{
+    font-family: 'Bebas Neue';
+    -webkit-box-shadow: 0px -1px 25px -4px rgba(0,0,0,0.37); 
+    box-shadow: 0px -1px 25px -4px rgba(0,0,0,0.37);
+    width: 540px;
+    height: 242px;
+    padding: 20px;
+    border-radius: 12px;
+    margin-top: 50px;
+    text-align: center;
+}
+
+.withdrawBox input{
+    width: 231px;
+}
+
+.burnBox{
+    font-family: 'Bebas Neue';
+    -webkit-box-shadow: 0px -1px 25px -4px rgba(0,0,0,0.37); 
+    box-shadow: 0px -1px 25px -4px rgba(0,0,0,0.37);
+    width: 540px;
+    height: 300px;
+    padding: 20px;
+    border-radius: 12px;
+    margin-top: 50px;
+    text-align: center;
+}
+
+.burnBox select{
+
+    width: 400px;
+    margin-left: 40px;
+}
+
+.burnBox input{
+    width: 231px;
+}
+
+.burnBtn{
+    font-family: 'Bebas Neue' !important;
+    background: #42FF8D;
+    border-radius: 6px;
+    text-align: center;
+    color:rgb(29, 27, 27);
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 24px;
+    margin-top: 20px;
+    width: 400px;
+    height: 40px;
+
+}

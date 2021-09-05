@@ -78,34 +78,20 @@ app.put("/campaigns/:id", async (req, res) =>{
     }
 })
 
-app.put("/campaigns/:id/finish", async (req, res) =>{
-    try {
-        const { id } = req.params;
-        const { isFinished } = req.body;
-        const change = await pool.query(
-            "UPDATE campaigns SET camp_isFinished = $1 WHERE camp_id = $2",
-            [isFinished, id]
-        );
+//donate from l2
 
-        res.json("FINISHED A CAMPAIGN");
-    } catch (error) {
-        console.log(error.message);
+app.put("/campaigns/layer2/:id", async(req, res) =>{
+    try {
+        const {id} = req.params;
+        const { rasied } = req.body;
+        const donate = await pool.query(
+            "UPDATE campaigns SET camp_l2Raised = $1 WHERE camp_id = $2",
+            [raised, id]
+        );
+    } catch (err) {
+        console.log(err.message)
     }
 })
-
-// //delete a todo
-
-// app.delete("/todos/:id", async (req, res) => {
-//     try {
-//         const {id} = req.params;
-//         const deleteTodo = await pool.query("DELETE FROM todo WHERE todo_id = $1", [id]);
-
-//         res.json("TODO WAS DELETED");
-//     } catch (error) {
-//         console.log(error.message);
-//     }
-// })
-
 
 app.listen(5000, () => {
     console.log("Server has started on port 5000");

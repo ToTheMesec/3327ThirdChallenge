@@ -10,6 +10,7 @@ import CampaignView from './components/CampaignView';
 import {BrowserRouter as Router, Switch, Route} from "react-router-dom";
 import UserDashBoard from './components/UserDashboard';
 import DonationView from './components/DonationView';
+import L2View from './components/L2View';
 
 const Routing = () => {
   return(
@@ -23,6 +24,7 @@ const Routing = () => {
               <Route path="/campaign/:id" component={CampaignView} />
               <Route path="/user-dashboard" component={UserDashBoard} />
               <Route path="/campaign-donation/:id" component={DonationView} />
+              <Route path="/layer-2/" component = {L2View} />
           </Switch>
       </Router>
   )

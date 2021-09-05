@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import {tokenName, getCampaigns} from "../utils";
 import Web3 from 'web3';
 import SupportChildren from "../abis/SupportChildren.json";
 import '../App.css';
@@ -19,32 +20,16 @@ class UserDashBoard extends Component{
             campaigns: [],
             campaignsBC: [],
             labels: [],
-            data: []
+            data: [],
+            isActiveArray: []
         }
     }
 
     async componentWillMount() {
-        await this.getCampaigns();
         await this.loadWeb3();
         await this.loadBlockchainData();
         
     } 
-
-    async getCampaigns () {
-        try {
-          const response = await fetch("http://localhost:5000/campaigns")
-          const jsonData = await response.json()
-    
-          this.setState({
-            campaigns: jsonData
-          })
-    
-        } catch (err) {
-          console.log(err.message);
-        }
-    }
-    
-      
     
     async loadWeb3(){
         if(window.ethereum){
@@ -65,6 +50,16 @@ class UserDashBoard extends Component{
 
         const addressField = document.getElementById("address")
         addressField.innerHTML = accountWeb3[0]
+
+        web3.eth.getBalance(this.state.account, function(err, result) {
+          if (err) {
+            console.log(err)
+          } else {
+            const val = document.getElementById("value")
+            var res = web3.utils.fromWei(result, "ether")
+            val.innerHTML = parseFloat(res).toFixed(2) + " ETH"
+          }
+        })
     
         const networkId = await web3.eth.net.getId()
         const networkData = await SupportChildren.networks[networkId]
@@ -73,32 +68,39 @@ class UserDashBoard extends Component{
             const address = networkData.address
             const contractWeb3 = new web3.eth.Contract(abi, address)
     
-            this.setState({contract: contractWeb3})
+            this.setState({contract: contractWeb3, campaigns: await getCampaigns()})
 
             const campaignsContract = await contractWeb3.methods.getCampaigns().call()
             const indices = []
 
             for(var i =0;i<campaignsContract.length;i++){
               if(campaignsContract[i].beneficiary == this.state.account){
-                indices.push(i);
+                indices.push(i+1);
               }
             }
 
             const labels = []
             const data = []
+            const isActiveArray = []
 
             for(var i =0;i<this.state.campaigns.length;i++){
-              console.log(indices.includes(parseInt(this.state.campaigns[i].camp_id)-1))
-              if(indices.includes(parseInt(this.state.campaigns[i].camp_id)-1)){
+              if(indices.includes(parseInt(this.state.campaigns[i].camp_id))){
                 labels.push(this.state.campaigns[i].camp_title);
                 data.push(this.state.campaigns[i].camp_raised);
               }
             }
 
+            for(var i =0;i<this.state.campaigns.length;i++){
+                var isActive = await contractWeb3.methods.isCampaignActive(parseInt(this.state.campaigns[i].camp_id)-1).call()
+                isActiveArray.push(Boolean(isActive))
+            }
+
+
             this.setState({
-              campaignsBC:indices,
+              campaignsBC:indices,//niz indeksa korisnikovih kampanja u nizu kampanja iz kontrakta
               labels: labels,
-              data: data
+              data: data,
+              isActiveArray: isActiveArray//da li je korisnikova kampanja aktivna
             })
     
         } else {
@@ -154,7 +156,8 @@ class UserDashBoard extends Component{
                   <div className = "row">
                     <div className = "col-sm" style = {{paddingLeft: '100px'}}>
                       {this.state.campaigns.filter((campaign) => {
-                          if(this.state.campaignsBC.includes(parseInt(campaign.camp_id)-1) && !Boolean(campaign.camp_isfinished)){
+
+                          if(this.state.campaignsBC.includes(parseInt(campaign.camp_id)) && Boolean(this.state.isActiveArray[campaign.camp_id-1])){
                             return campaign;
                           }
                       }).map(campaign => (
@@ -168,7 +171,7 @@ class UserDashBoard extends Component{
                           <p style={{color : "#959595", marginBottom: "1px"}}>Created {Moment(campaign.camp_deadline).format('L')}</p>
                           <progress value = {campaign.camp_raised} max = {campaign.camp_goal} className = "progress"></progress>
 
-                          <p className = "card-text"><strong>Donated {campaign.camp_raised}</strong> of {campaign.camp_goal}</p>
+                          <p className = "card-text"><strong>Donated {campaign.camp_raised} {tokenName(campaign.camp_currency)}</strong> of {campaign.camp_goal} {tokenName(campaign.camp_currency)}</p>
                         </div>
                         </div>
                       ))}
@@ -180,7 +183,8 @@ class UserDashBoard extends Component{
                   <div className = "row">
                     <div className = "col-sm" style = {{paddingLeft: '100px'}}>
                       {this.state.campaigns.filter((campaign) => {
-                          if(this.state.campaignsBC.includes(parseInt(campaign.camp_id)-1) && Boolean(campaign.camp_isfinished)){
+                          console.log(this.state.campaigns[0])
+                          if(this.state.campaignsBC.includes(parseInt(campaign.camp_id)) && !Boolean(this.state.isActiveArray[campaign.camp_id-1])){
                             return campaign;
                           }
                       }).map(campaign => (
@@ -193,7 +197,7 @@ class UserDashBoard extends Component{
                           <p className = "card-text">{campaign.camp_description}</p>
                           <p style={{color : "#959595", marginBottom: "1px"}}>Created {Moment(campaign.camp_deadline).format('L')}</p>
                           <progress value = {campaign.camp_raised} max = {campaign.camp_goal} className = "progress"></progress>
-                          <p className = "card-text"><strong>Donated {campaign.camp_raised}</strong> of {campaign.camp_goal}</p>
+                          <p className = "card-text"><strong>Donated {campaign.camp_raised} {tokenName(campaign.camp_currency)}</strong> of {campaign.camp_goal} {tokenName(campaign.camp_currency)}</p>
                         </div>
                         </div>
                       ))}

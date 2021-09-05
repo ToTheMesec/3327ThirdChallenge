@@ -20,7 +20,7 @@ class InputCampaign extends Component{
             deadline: '',
             goal: '',
             category: '',
-            currency: '',
+            currency: '0x0000000000000000000000000000000000000000',
             selectedFile: '',
             img: '',
             prog: 0,
@@ -113,7 +113,17 @@ class InputCampaign extends Component{
         this.setState({account: accountWeb3[0]})
 
         const addressField = document.getElementById("address")
-        addressField.innerHTML = accountWeb3[0]
+        addressField.innerHTML = this.state.account
+
+        web3.eth.getBalance(this.state.account, function(err, result) {
+          if (err) {
+            console.log(err)
+          } else {
+            const val = document.getElementById("value")
+            var res = web3.utils.fromWei(result, "ether")
+            val.innerHTML = parseFloat(res).toFixed(2) + " ETH"
+          }
+        })
     
         const networkId = await web3.eth.net.getId()
         const networkData = await SupportChildren.networks[networkId]
@@ -128,18 +138,26 @@ class InputCampaign extends Component{
             window.alert('Smart contract not deployed to detected network')
         }
     }
+    // function createCampaign(address payable _beneficiary, uint _endTimestamp, uint _goal, address _token) override external {
 
     onSubmitForm = async (evt) => {
+      // function createCampaign(
+      //   address payable _beneficiary,
+      //   uint256 _endTimestamp,
+      //   address _wantToken,
+      //   uint256 _hardCap
+
+        const web3 = window.web3
         evt.preventDefault();
-        this.state.contract.methods.createCampaign(this.state.account, 1928010725).send({from: this.state.account})
+        this.state.contract.methods.createCampaign(this.state.account, Date.parse(this.state.deadline), this.state.currency, web3.utils.toWei(String(parseFloat(this.state.goal)))).send({from: this.state.account})
         .then( async () => {
                 try {
                 const body = {
                     title: this.state.title,
                     description: this.state.description, 
                     email: this.state.email, 
-                    deadline: this.state.deadline, 
-                    goal: this.state.goal,
+                    deadline: this.state.deadline,
+                    goal: this.state.goal, 
                     currency: this.state.currency,
                     category: this.state.category,
                     url: "https://ipfs.io/ipfs/" + this.state.ipfsHash
@@ -192,10 +210,11 @@ class InputCampaign extends Component{
                     </div>
                     <div id="inputSelect">
                     <select id="kripto" onChange = {evt => this.setState({currency: evt.target.value})}>
-                    <option value="eth">ETH</option>
-                    <option value="btc">BTC</option>
-                    <option value="ltc">LTC</option>
-  
+                      <option value="0x0000000000000000000000000000000000000000">ETH</option>
+                      <option value="0xdc31ee1784292379fbb2964b3b9c4124d8f89c60">DAI</option>
+                      <option value="0xf629cbd94d3791c9250152bd8dfbdf380e2a3b9c">ENJ</option>
+                      <option value="0x3845badAde8e6dFF049820680d1F14bD3903a5d0">SAND</option>
+                      <option value="0xa117000000f279d81a1d3cc75430faa017fa5a2e">ANT</option>
                     </select>
                     <input placeholder="Enter amount"id="amountNeedbroj" type="number" step="0.0000001" onChange = {evt => this.setState({goal:evt.target.value})}></input>
                     
@@ -220,7 +239,8 @@ class InputCampaign extends Component{
                     <option value="" disabled selected>Pick a category</option>
                     <option value="health">Health</option>
                     <option value="education">Education</option>
-                    <option value="Last wish">Last wish</option>
+                    <option value="lastwish">Last wish</option>
+                    <option value="ideas">Ideas</option>
   
                     </select>
                     </div>

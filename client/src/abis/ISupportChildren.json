@@ -21,6 +21,26 @@
               "internalType": "address payable",
               "name": "beneficiary",
               "type": "address"
+            },
+            {
+              "internalType": "address",
+              "name": "wantToken",
+              "type": "address"
+            },
+            {
+              "internalType": "uint256",
+              "name": "hardCap",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "receivedAmount",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "campaignId",
+              "type": "uint256"
             }
           ],
           "indexed": false,
@@ -44,7 +64,7 @@
         {
           "indexed": false,
           "internalType": "uint256",
-          "name": "amount",
+          "name": "donatedAmountInWantToken",
           "type": "uint256"
         },
         {
@@ -97,6 +117,26 @@
               "internalType": "address payable",
               "name": "beneficiary",
               "type": "address"
+            },
+            {
+              "internalType": "address",
+              "name": "wantToken",
+              "type": "address"
+            },
+            {
+              "internalType": "uint256",
+              "name": "hardCap",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "receivedAmount",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "campaignId",
+              "type": "uint256"
             }
           ],
           "internalType": "struct ISupportChildren.Campaign",
@@ -118,6 +158,16 @@
           "internalType": "uint256",
           "name": "_endTimestamp",
           "type": "uint256"
+        },
+        {
+          "internalType": "address",
+          "name": "wantToken",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_hardCap",
+          "type": "uint256"
         }
       ],
       "name": "createCampaign",
@@ -134,21 +184,16 @@
         },
         {
           "internalType": "address",
-          "name": "_token",
+          "name": "_donorToken",
           "type": "address"
         },
         {
           "internalType": "uint256",
-          "name": "_amount",
+          "name": "_amountInDonorTokens",
           "type": "uint256"
-        },
-        {
-          "internalType": "string",
-          "name": "_mail",
-          "type": "string"
         }
       ],
-      "name": "donateERC",
+      "name": "donate",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
@@ -172,73 +217,74 @@
       "type": "function"
     }
   ],
-  "metadata": "{\"compiler\":{\"version\":\"0.8.6+commit.11564f7e\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"campaignId\",\"type\":\"uint256\"},{\"components\":[{\"internalType\":\"uint256\",\"name\":\"endTimestamp\",\"type\":\"uint256\"},{\"internalType\":\"address payable\",\"name\":\"beneficiary\",\"type\":\"address\"}],\"indexed\":false,\"internalType\":\"struct ISupportChildren.Campaign\",\"name\":\"campaign\",\"type\":\"tuple\"}],\"name\":\"CampaignCreated\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"campaignId\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"tokenAddress\",\"type\":\"address\"}],\"name\":\"Donation\",\"type\":\"event\"},{\"inputs\":[{\"internalType\":\"address payable\",\"name\":\"_beneficiary\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"_endTimestamp\",\"type\":\"uint256\"}],\"name\":\"createCampaign\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_campaignId\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"_token\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"_amount\",\"type\":\"uint256\"},{\"internalType\":\"string\",\"name\":\"_mail\",\"type\":\"string\"}],\"name\":\"donateERC\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_campaignId\",\"type\":\"uint256\"},{\"internalType\":\"string\",\"name\":\"_mail\",\"type\":\"string\"}],\"name\":\"donateETH\",\"outputs\":[],\"stateMutability\":\"payable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_campaignId\",\"type\":\"uint256\"}],\"name\":\"getCampaign\",\"outputs\":[{\"components\":[{\"internalType\":\"uint256\",\"name\":\"endTimestamp\",\"type\":\"uint256\"},{\"internalType\":\"address payable\",\"name\":\"beneficiary\",\"type\":\"address\"}],\"internalType\":\"struct ISupportChildren.Campaign\",\"name\":\"\",\"type\":\"tuple\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_campaignId\",\"type\":\"uint256\"}],\"name\":\"isCampaignActive\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"/C/Users/Luka/Desktop/SaveChildrenV2.0/client/src/contracts/interfaces/ISupportChildren.sol\":\"ISupportChildren\"},\"evmVersion\":\"berlin\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"/C/Users/Luka/Desktop/SaveChildrenV2.0/client/src/contracts/interfaces/ISupportChildren.sol\":{\"keccak256\":\"0x063f2bb737232fc41349410b047b5874631faccfb6dd3f16767c7e512e22feb0\",\"urls\":[\"bzz-raw://4532d38996586ce9953d0dba8f14e876566ba3c8f1237e78476248ce57615be3\",\"dweb:/ipfs/Qmcgmgv8dVPv5zRN6yVfUp6pyCaeqBhu2gyYqHYq6Z9Cra\"]}},\"version\":1}",
+  "metadata": "{\"compiler\":{\"version\":\"0.6.6+commit.6c089d02\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"campaignId\",\"type\":\"uint256\"},{\"components\":[{\"internalType\":\"uint256\",\"name\":\"endTimestamp\",\"type\":\"uint256\"},{\"internalType\":\"address payable\",\"name\":\"beneficiary\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"wantToken\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"hardCap\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"receivedAmount\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"campaignId\",\"type\":\"uint256\"}],\"indexed\":false,\"internalType\":\"struct ISupportChildren.Campaign\",\"name\":\"campaign\",\"type\":\"tuple\"}],\"name\":\"CampaignCreated\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"campaignId\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"donatedAmountInWantToken\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"tokenAddress\",\"type\":\"address\"}],\"name\":\"Donation\",\"type\":\"event\"},{\"inputs\":[{\"internalType\":\"address payable\",\"name\":\"_beneficiary\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"_endTimestamp\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"wantToken\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"_hardCap\",\"type\":\"uint256\"}],\"name\":\"createCampaign\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_campaignId\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"_donorToken\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"_amountInDonorTokens\",\"type\":\"uint256\"}],\"name\":\"donate\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_campaignId\",\"type\":\"uint256\"},{\"internalType\":\"string\",\"name\":\"_mail\",\"type\":\"string\"}],\"name\":\"donateETH\",\"outputs\":[],\"stateMutability\":\"payable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_campaignId\",\"type\":\"uint256\"}],\"name\":\"getCampaign\",\"outputs\":[{\"components\":[{\"internalType\":\"uint256\",\"name\":\"endTimestamp\",\"type\":\"uint256\"},{\"internalType\":\"address payable\",\"name\":\"beneficiary\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"wantToken\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"hardCap\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"receivedAmount\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"campaignId\",\"type\":\"uint256\"}],\"internalType\":\"struct ISupportChildren.Campaign\",\"name\":\"\",\"type\":\"tuple\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_campaignId\",\"type\":\"uint256\"}],\"name\":\"isCampaignActive\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"methods\":{}},\"userdoc\":{\"methods\":{}}},\"settings\":{\"compilationTarget\":{\"/C/Users/Luka/Desktop/SupportChildrenV2.0/client/src/contracts/interfaces/ISupportChildren.sol\":\"ISupportChildren\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"/C/Users/Luka/Desktop/SupportChildrenV2.0/client/src/contracts/interfaces/ISupportChildren.sol\":{\"keccak256\":\"0x35d76b50fb06589637a84936e4ef098025359432de3fba1a76c5f7c9d6f30c86\",\"urls\":[\"bzz-raw://3ab0cac2fb602bb98b329dd8bca87512aa1c663ac5d13040eb9a8e4cee77934a\",\"dweb:/ipfs/QmVqmc4TzbDdnhy7U1jf3A78b481qPBPkTaaa5v5rVqmj2\"]}},\"version\":1}",
   "bytecode": "0x",
   "deployedBytecode": "0x",
   "immutableReferences": {},
-  "generatedSources": [],
-  "deployedGeneratedSources": [],
   "sourceMap": "",
   "deployedSourceMap": "",
-  "source": "pragma solidity ^0.8.0;\r\npragma abicoder v2;\r\n\r\ninterface ISupportChildren {\r\n    struct Campaign {\r\n        uint endTimestamp;\r\n        address payable beneficiary;\r\n    }\r\n\r\n    struct DonationStruct{\r\n        address payable from;\r\n        uint256 amount;\r\n    }\r\n\r\n    event CampaignCreated(uint campaignId, Campaign campaign);\r\n    event Donation(uint campaignId, uint amount, address tokenAddress);\r\n\r\n    function isCampaignActive(uint _campaignId) external view returns(bool);\r\n    function getCampaign(uint _campaignId) external view returns(Campaign memory);\r\n    function createCampaign(address payable _beneficiary, uint _endTimestamp) external;\r\n    function donateERC(uint _campaignId, address _token, uint _amount, string memory _mail) external;\r\n    function donateETH(uint _campaignId, string memory _mail) external payable;\r\n}",
-  "sourcePath": "C:\\Users\\Luka\\Desktop\\SaveChildrenV2.0\\client\\src\\contracts\\interfaces\\ISupportChildren.sol",
+  "source": "pragma solidity >= 0.6.0 <= 0.8.0;\r\npragma experimental ABIEncoderV2;\r\n\r\ninterface ISupportChildren {\r\n    struct Campaign {\r\n        uint256 endTimestamp;\r\n        address payable beneficiary;\r\n        address wantToken;\r\n        uint256 hardCap;\r\n        uint256 receivedAmount;\r\n        uint256 campaignId;\r\n    }\r\n\r\n    struct DonationStruct{\r\n        address payable from;\r\n        uint256 amount;\r\n    }\r\n\r\n    event CampaignCreated(uint256 campaignId, Campaign campaign);\r\n    event Donation(uint256 campaignId, uint256 donatedAmountInWantToken, address tokenAddress);\r\n\r\n    function isCampaignActive(uint256 _campaignId) external view returns (bool);\r\n\r\n    function getCampaign(uint256 _campaignId)\r\n        external\r\n        view\r\n        returns (Campaign memory);\r\n\r\n    function createCampaign(\r\n        address payable _beneficiary,\r\n        uint256 _endTimestamp,\r\n        address wantToken,\r\n        uint256 _hardCap\r\n    ) external;\r\n\r\n    // @params _donorToken assumed not to be ETH or WETH, for that use donateETH()\r\n    function donate(\r\n        uint256 _campaignId,\r\n        address _donorToken,\r\n        uint256 _amountInDonorTokens\r\n    ) external;\r\n\r\n    function donateETH(uint256 _campaignId, string calldata _mail) external payable;\r\n}",
+  "sourcePath": "C:\\Users\\Luka\\Desktop\\SupportChildrenV2.0\\client\\src\\contracts\\interfaces\\ISupportChildren.sol",
   "ast": {
-    "absolutePath": "/C/Users/Luka/Desktop/SaveChildrenV2.0/client/src/contracts/interfaces/ISupportChildren.sol",
+    "absolutePath": "/C/Users/Luka/Desktop/SupportChildrenV2.0/client/src/contracts/interfaces/ISupportChildren.sol",
     "exportedSymbols": {
       "ISupportChildren": [
-        1074
+        1270
       ]
     },
-    "id": 1075,
+    "id": 1271,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 1007,
+        "id": 1195,
         "literals": [
           "solidity",
-          "^",
+          ">=",
+          "0.6",
+          ".0",
+          "<=",
           "0.8",
           ".0"
         ],
         "nodeType": "PragmaDirective",
-        "src": "0:23:4"
+        "src": "0:34:5"
       },
       {
-        "id": 1008,
+        "id": 1196,
         "literals": [
-          "abicoder",
-          "v2"
+          "experimental",
+          "ABIEncoderV2"
         ],
         "nodeType": "PragmaDirective",
-        "src": "25:19:4"
+        "src": "36:33:5"
       },
       {
         "abstract": false,
         "baseContracts": [],
         "contractDependencies": [],
         "contractKind": "interface",
+        "documentation": null,
         "fullyImplemented": false,
-        "id": 1074,
+        "id": 1270,
         "linearizedBaseContracts": [
-          1074
+          1270
         ],
         "name": "ISupportChildren",
-        "nameLocation": "58:16:4",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
             "canonicalName": "ISupportChildren.Campaign",
-            "id": 1013,
+            "id": 1209,
             "members": [
               {
                 "constant": false,
-                "id": 1010,
+                "id": 1198,
                 "mutability": "mutable",
                 "name": "endTimestamp",
-                "nameLocation": "114:12:4",
                 "nodeType": "VariableDeclaration",
-                "scope": 1013,
-                "src": "109:17:4",
+                "overrides": null,
+                "scope": 1209,
+                "src": "134:20:5",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -246,26 +292,27 @@
                   "typeString": "uint256"
                 },
                 "typeName": {
-                  "id": 1009,
-                  "name": "uint",
+                  "id": 1197,
+                  "name": "uint256",
                   "nodeType": "ElementaryTypeName",
-                  "src": "109:4:4",
+                  "src": "134:7:5",
                   "typeDescriptions": {
                     "typeIdentifier": "t_uint256",
                     "typeString": "uint256"
                   }
                 },
+                "value": null,
                 "visibility": "internal"
               },
               {
                 "constant": false,
-                "id": 1012,
+                "id": 1200,
                 "mutability": "mutable",
                 "name": "beneficiary",
-                "nameLocation": "153:11:4",
                 "nodeType": "VariableDeclaration",
-                "scope": 1013,
-                "src": "137:27:4",
+                "overrides": null,
+                "scope": 1209,
+                "src": "165:27:5",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -273,39 +320,152 @@
                   "typeString": "address payable"
                 },
                 "typeName": {
-                  "id": 1011,
+                  "id": 1199,
                   "name": "address",
                   "nodeType": "ElementaryTypeName",
-                  "src": "137:15:4",
+                  "src": "165:15:5",
                   "stateMutability": "payable",
                   "typeDescriptions": {
                     "typeIdentifier": "t_address_payable",
                     "typeString": "address payable"
                   }
                 },
+                "value": null,
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 1202,
+                "mutability": "mutable",
+                "name": "wantToken",
+                "nodeType": "VariableDeclaration",
+                "overrides": null,
+                "scope": 1209,
+                "src": "203:17:5",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_address",
+                  "typeString": "address"
+                },
+                "typeName": {
+                  "id": 1201,
+                  "name": "address",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "203:7:5",
+                  "stateMutability": "nonpayable",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 1204,
+                "mutability": "mutable",
+                "name": "hardCap",
+                "nodeType": "VariableDeclaration",
+                "overrides": null,
+                "scope": 1209,
+                "src": "231:15:5",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                },
+                "typeName": {
+                  "id": 1203,
+                  "name": "uint256",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "231:7:5",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 1206,
+                "mutability": "mutable",
+                "name": "receivedAmount",
+                "nodeType": "VariableDeclaration",
+                "overrides": null,
+                "scope": 1209,
+                "src": "257:22:5",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                },
+                "typeName": {
+                  "id": 1205,
+                  "name": "uint256",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "257:7:5",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 1208,
+                "mutability": "mutable",
+                "name": "campaignId",
+                "nodeType": "VariableDeclaration",
+                "overrides": null,
+                "scope": 1209,
+                "src": "290:18:5",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                },
+                "typeName": {
+                  "id": 1207,
+                  "name": "uint256",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "290:7:5",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                },
+                "value": null,
                 "visibility": "internal"
               }
             ],
             "name": "Campaign",
-            "nameLocation": "89:8:4",
             "nodeType": "StructDefinition",
-            "scope": 1074,
-            "src": "82:90:4",
+            "scope": 1270,
+            "src": "107:209:5",
             "visibility": "public"
           },
           {
             "canonicalName": "ISupportChildren.DonationStruct",
-            "id": 1018,
+            "id": 1214,
             "members": [
               {
                 "constant": false,
-                "id": 1015,
+                "id": 1211,
                 "mutability": "mutable",
                 "name": "from",
-                "nameLocation": "228:4:4",
                 "nodeType": "VariableDeclaration",
-                "scope": 1018,
-                "src": "212:20:4",
+                "overrides": null,
+                "scope": 1214,
+                "src": "356:20:5",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -313,27 +473,28 @@
                   "typeString": "address payable"
                 },
                 "typeName": {
-                  "id": 1014,
+                  "id": 1210,
                   "name": "address",
                   "nodeType": "ElementaryTypeName",
-                  "src": "212:15:4",
+                  "src": "356:15:5",
                   "stateMutability": "payable",
                   "typeDescriptions": {
                     "typeIdentifier": "t_address_payable",
                     "typeString": "address payable"
                   }
                 },
+                "value": null,
                 "visibility": "internal"
               },
               {
                 "constant": false,
-                "id": 1017,
+                "id": 1213,
                 "mutability": "mutable",
                 "name": "amount",
-                "nameLocation": "251:6:4",
                 "nodeType": "VariableDeclaration",
-                "scope": 1018,
-                "src": "243:14:4",
+                "overrides": null,
+                "scope": 1214,
+                "src": "387:14:5",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -341,45 +502,45 @@
                   "typeString": "uint256"
                 },
                 "typeName": {
-                  "id": 1016,
+                  "id": 1212,
                   "name": "uint256",
                   "nodeType": "ElementaryTypeName",
-                  "src": "243:7:4",
+                  "src": "387:7:5",
                   "typeDescriptions": {
                     "typeIdentifier": "t_uint256",
                     "typeString": "uint256"
                   }
                 },
+                "value": null,
                 "visibility": "internal"
               }
             ],
             "name": "DonationStruct",
-            "nameLocation": "187:14:4",
             "nodeType": "StructDefinition",
-            "scope": 1074,
-            "src": "180:85:4",
+            "scope": 1270,
+            "src": "324:85:5",
             "visibility": "public"
           },
           {
             "anonymous": false,
-            "id": 1025,
+            "documentation": null,
+            "id": 1220,
             "name": "CampaignCreated",
-            "nameLocation": "279:15:4",
             "nodeType": "EventDefinition",
             "parameters": {
-              "id": 1024,
+              "id": 1219,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 1020,
+                  "id": 1216,
                   "indexed": false,
                   "mutability": "mutable",
                   "name": "campaignId",
-                  "nameLocation": "300:10:4",
                   "nodeType": "VariableDeclaration",
-                  "scope": 1025,
-                  "src": "295:15:4",
+                  "overrides": null,
+                  "scope": 1220,
+                  "src": "439:18:5",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -387,77 +548,74 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 1019,
-                    "name": "uint",
+                    "id": 1215,
+                    "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "295:4:4",
+                    "src": "439:7:5",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
                     }
                   },
+                  "value": null,
                   "visibility": "internal"
                 },
                 {
                   "constant": false,
-                  "id": 1023,
+                  "id": 1218,
                   "indexed": false,
                   "mutability": "mutable",
                   "name": "campaign",
-                  "nameLocation": "321:8:4",
                   "nodeType": "VariableDeclaration",
-                  "scope": 1025,
-                  "src": "312:17:4",
+                  "overrides": null,
+                  "scope": 1220,
+                  "src": "459:17:5",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_struct$_Campaign_$1013_memory_ptr",
+                    "typeIdentifier": "t_struct$_Campaign_$1209_memory_ptr",
                     "typeString": "struct ISupportChildren.Campaign"
                   },
                   "typeName": {
-                    "id": 1022,
+                    "contractScope": null,
+                    "id": 1217,
+                    "name": "Campaign",
                     "nodeType": "UserDefinedTypeName",
-                    "pathNode": {
-                      "id": 1021,
-                      "name": "Campaign",
-                      "nodeType": "IdentifierPath",
-                      "referencedDeclaration": 1013,
-                      "src": "312:8:4"
-                    },
-                    "referencedDeclaration": 1013,
-                    "src": "312:8:4",
+                    "referencedDeclaration": 1209,
+                    "src": "459:8:5",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_struct$_Campaign_$1013_storage_ptr",
+                      "typeIdentifier": "t_struct$_Campaign_$1209_storage_ptr",
                       "typeString": "struct ISupportChildren.Campaign"
                     }
                   },
+                  "value": null,
                   "visibility": "internal"
                 }
               ],
-              "src": "294:36:4"
+              "src": "438:39:5"
             },
-            "src": "273:58:4"
+            "src": "417:61:5"
           },
           {
             "anonymous": false,
-            "id": 1033,
+            "documentation": null,
+            "id": 1228,
             "name": "Donation",
-            "nameLocation": "343:8:4",
             "nodeType": "EventDefinition",
             "parameters": {
-              "id": 1032,
+              "id": 1227,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 1027,
+                  "id": 1222,
                   "indexed": false,
                   "mutability": "mutable",
                   "name": "campaignId",
-                  "nameLocation": "357:10:4",
                   "nodeType": "VariableDeclaration",
-                  "scope": 1033,
-                  "src": "352:15:4",
+                  "overrides": null,
+                  "scope": 1228,
+                  "src": "499:18:5",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -465,27 +623,28 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 1026,
-                    "name": "uint",
+                    "id": 1221,
+                    "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "352:4:4",
+                    "src": "499:7:5",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
                     }
                   },
+                  "value": null,
                   "visibility": "internal"
                 },
                 {
                   "constant": false,
-                  "id": 1029,
+                  "id": 1224,
                   "indexed": false,
                   "mutability": "mutable",
-                  "name": "amount",
-                  "nameLocation": "374:6:4",
+                  "name": "donatedAmountInWantToken",
                   "nodeType": "VariableDeclaration",
-                  "scope": 1033,
-                  "src": "369:11:4",
+                  "overrides": null,
+                  "scope": 1228,
+                  "src": "519:32:5",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -493,27 +652,28 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 1028,
-                    "name": "uint",
+                    "id": 1223,
+                    "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "369:4:4",
+                    "src": "519:7:5",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
                     }
                   },
+                  "value": null,
                   "visibility": "internal"
                 },
                 {
                   "constant": false,
-                  "id": 1031,
+                  "id": 1226,
                   "indexed": false,
                   "mutability": "mutable",
                   "name": "tokenAddress",
-                  "nameLocation": "390:12:4",
                   "nodeType": "VariableDeclaration",
-                  "scope": 1033,
-                  "src": "382:20:4",
+                  "overrides": null,
+                  "scope": 1228,
+                  "src": "553:20:5",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -521,45 +681,48 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 1030,
+                    "id": 1225,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "382:7:4",
+                    "src": "553:7:5",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
                       "typeString": "address"
                     }
                   },
+                  "value": null,
                   "visibility": "internal"
                 }
               ],
-              "src": "351:52:4"
+              "src": "498:76:5"
             },
-            "src": "337:67:4"
+            "src": "484:91:5"
           },
           {
+            "body": null,
+            "documentation": null,
             "functionSelector": "e1e33009",
-            "id": 1040,
+            "id": 1235,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "isCampaignActive",
-            "nameLocation": "421:16:4",
             "nodeType": "FunctionDefinition",
+            "overrides": null,
             "parameters": {
-              "id": 1036,
+              "id": 1231,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 1035,
+                  "id": 1230,
                   "mutability": "mutable",
                   "name": "_campaignId",
-                  "nameLocation": "443:11:4",
                   "nodeType": "VariableDeclaration",
-                  "scope": 1040,
-                  "src": "438:16:4",
+                  "overrides": null,
+                  "scope": 1235,
+                  "src": "609:19:5",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -567,33 +730,34 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 1034,
-                    "name": "uint",
+                    "id": 1229,
+                    "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "438:4:4",
+                    "src": "609:7:5",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
                     }
                   },
+                  "value": null,
                   "visibility": "internal"
                 }
               ],
-              "src": "437:18:4"
+              "src": "608:21:5"
             },
             "returnParameters": {
-              "id": 1039,
+              "id": 1234,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 1038,
+                  "id": 1233,
                   "mutability": "mutable",
                   "name": "",
-                  "nameLocation": "-1:-1:-1",
                   "nodeType": "VariableDeclaration",
-                  "scope": 1040,
-                  "src": "478:4:4",
+                  "overrides": null,
+                  "scope": 1235,
+                  "src": "653:4:5",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -601,48 +765,51 @@
                     "typeString": "bool"
                   },
                   "typeName": {
-                    "id": 1037,
+                    "id": 1232,
                     "name": "bool",
                     "nodeType": "ElementaryTypeName",
-                    "src": "478:4:4",
+                    "src": "653:4:5",
                     "typeDescriptions": {
                       "typeIdentifier": "t_bool",
                       "typeString": "bool"
                     }
                   },
+                  "value": null,
                   "visibility": "internal"
                 }
               ],
-              "src": "477:6:4"
+              "src": "652:6:5"
             },
-            "scope": 1074,
-            "src": "412:72:4",
+            "scope": 1270,
+            "src": "583:76:5",
             "stateMutability": "view",
             "virtual": false,
             "visibility": "external"
           },
           {
+            "body": null,
+            "documentation": null,
             "functionSelector": "5598f8cc",
-            "id": 1048,
+            "id": 1242,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "getCampaign",
-            "nameLocation": "499:11:4",
             "nodeType": "FunctionDefinition",
+            "overrides": null,
             "parameters": {
-              "id": 1043,
+              "id": 1238,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 1042,
+                  "id": 1237,
                   "mutability": "mutable",
                   "name": "_campaignId",
-                  "nameLocation": "516:11:4",
                   "nodeType": "VariableDeclaration",
-                  "scope": 1048,
-                  "src": "511:16:4",
+                  "overrides": null,
+                  "scope": 1242,
+                  "src": "688:19:5",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -650,89 +817,88 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 1041,
-                    "name": "uint",
+                    "id": 1236,
+                    "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "511:4:4",
+                    "src": "688:7:5",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
                     }
                   },
+                  "value": null,
                   "visibility": "internal"
                 }
               ],
-              "src": "510:18:4"
+              "src": "687:21:5"
             },
             "returnParameters": {
-              "id": 1047,
+              "id": 1241,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 1046,
+                  "id": 1240,
                   "mutability": "mutable",
                   "name": "",
-                  "nameLocation": "-1:-1:-1",
                   "nodeType": "VariableDeclaration",
-                  "scope": 1048,
-                  "src": "551:15:4",
+                  "overrides": null,
+                  "scope": 1242,
+                  "src": "759:15:5",
                   "stateVariable": false,
                   "storageLocation": "memory",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_struct$_Campaign_$1013_memory_ptr",
+                    "typeIdentifier": "t_struct$_Campaign_$1209_memory_ptr",
                     "typeString": "struct ISupportChildren.Campaign"
                   },
                   "typeName": {
-                    "id": 1045,
+                    "contractScope": null,
+                    "id": 1239,
+                    "name": "Campaign",
                     "nodeType": "UserDefinedTypeName",
-                    "pathNode": {
-                      "id": 1044,
-                      "name": "Campaign",
-                      "nodeType": "IdentifierPath",
-                      "referencedDeclaration": 1013,
-                      "src": "551:8:4"
-                    },
-                    "referencedDeclaration": 1013,
-                    "src": "551:8:4",
+                    "referencedDeclaration": 1209,
+                    "src": "759:8:5",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_struct$_Campaign_$1013_storage_ptr",
+                      "typeIdentifier": "t_struct$_Campaign_$1209_storage_ptr",
                       "typeString": "struct ISupportChildren.Campaign"
                     }
                   },
+                  "value": null,
                   "visibility": "internal"
                 }
               ],
-              "src": "550:17:4"
+              "src": "758:17:5"
             },
-            "scope": 1074,
-            "src": "490:78:4",
+            "scope": 1270,
+            "src": "667:109:5",
             "stateMutability": "view",
             "virtual": false,
             "visibility": "external"
           },
           {
-            "functionSelector": "064e1faf",
-            "id": 1055,
+            "body": null,
+            "documentation": null,
+            "functionSelector": "e75489c0",
+            "id": 1253,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "createCampaign",
-            "nameLocation": "583:14:4",
             "nodeType": "FunctionDefinition",
+            "overrides": null,
             "parameters": {
-              "id": 1053,
+              "id": 1251,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 1050,
+                  "id": 1244,
                   "mutability": "mutable",
                   "name": "_beneficiary",
-                  "nameLocation": "614:12:4",
                   "nodeType": "VariableDeclaration",
-                  "scope": 1055,
-                  "src": "598:28:4",
+                  "overrides": null,
+                  "scope": 1253,
+                  "src": "818:28:5",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -740,27 +906,28 @@
                     "typeString": "address payable"
                   },
                   "typeName": {
-                    "id": 1049,
+                    "id": 1243,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "598:15:4",
+                    "src": "818:15:5",
                     "stateMutability": "payable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address_payable",
                       "typeString": "address payable"
                     }
                   },
+                  "value": null,
                   "visibility": "internal"
                 },
                 {
                   "constant": false,
-                  "id": 1052,
+                  "id": 1246,
                   "mutability": "mutable",
                   "name": "_endTimestamp",
-                  "nameLocation": "633:13:4",
                   "nodeType": "VariableDeclaration",
-                  "scope": 1055,
-                  "src": "628:18:4",
+                  "overrides": null,
+                  "scope": 1253,
+                  "src": "857:21:5",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -768,81 +935,27 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 1051,
-                    "name": "uint",
+                    "id": 1245,
+                    "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "628:4:4",
+                    "src": "857:7:5",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
                     }
                   },
-                  "visibility": "internal"
-                }
-              ],
-              "src": "597:50:4"
-            },
-            "returnParameters": {
-              "id": 1054,
-              "nodeType": "ParameterList",
-              "parameters": [],
-              "src": "656:0:4"
-            },
-            "scope": 1074,
-            "src": "574:83:4",
-            "stateMutability": "nonpayable",
-            "virtual": false,
-            "visibility": "external"
-          },
-          {
-            "functionSelector": "e5b8a7bc",
-            "id": 1066,
-            "implemented": false,
-            "kind": "function",
-            "modifiers": [],
-            "name": "donateERC",
-            "nameLocation": "672:9:4",
-            "nodeType": "FunctionDefinition",
-            "parameters": {
-              "id": 1064,
-              "nodeType": "ParameterList",
-              "parameters": [
-                {
-                  "constant": false,
-                  "id": 1057,
-                  "mutability": "mutable",
-                  "name": "_campaignId",
-                  "nameLocation": "687:11:4",
-                  "nodeType": "VariableDeclaration",
-                  "scope": 1066,
-                  "src": "682:16:4",
-                  "stateVariable": false,
-                  "storageLocation": "default",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_uint256",
-                    "typeString": "uint256"
-                  },
-                  "typeName": {
-                    "id": 1056,
-                    "name": "uint",
-                    "nodeType": "ElementaryTypeName",
-                    "src": "682:4:4",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_uint256",
-                      "typeString": "uint256"
-                    }
-                  },
+                  "value": null,
                   "visibility": "internal"
                 },
                 {
                   "constant": false,
-                  "id": 1059,
+                  "id": 1248,
                   "mutability": "mutable",
-                  "name": "_token",
-                  "nameLocation": "708:6:4",
+                  "name": "wantToken",
                   "nodeType": "VariableDeclaration",
-                  "scope": 1066,
-                  "src": "700:14:4",
+                  "overrides": null,
+                  "scope": 1253,
+                  "src": "889:17:5",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -850,27 +963,28 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 1058,
+                    "id": 1247,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "700:7:4",
+                    "src": "889:7:5",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
                       "typeString": "address"
                     }
                   },
+                  "value": null,
                   "visibility": "internal"
                 },
                 {
                   "constant": false,
-                  "id": 1061,
+                  "id": 1250,
                   "mutability": "mutable",
-                  "name": "_amount",
-                  "nameLocation": "721:7:4",
+                  "name": "_hardCap",
                   "nodeType": "VariableDeclaration",
-                  "scope": 1066,
-                  "src": "716:12:4",
+                  "overrides": null,
+                  "scope": 1253,
+                  "src": "917:16:5",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -878,81 +992,57 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 1060,
-                    "name": "uint",
+                    "id": 1249,
+                    "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "716:4:4",
+                    "src": "917:7:5",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
                     }
                   },
-                  "visibility": "internal"
-                },
-                {
-                  "constant": false,
-                  "id": 1063,
-                  "mutability": "mutable",
-                  "name": "_mail",
-                  "nameLocation": "744:5:4",
-                  "nodeType": "VariableDeclaration",
-                  "scope": 1066,
-                  "src": "730:19:4",
-                  "stateVariable": false,
-                  "storageLocation": "memory",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_string_memory_ptr",
-                    "typeString": "string"
-                  },
-                  "typeName": {
-                    "id": 1062,
-                    "name": "string",
-                    "nodeType": "ElementaryTypeName",
-                    "src": "730:6:4",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_string_storage_ptr",
-                      "typeString": "string"
-                    }
-                  },
+                  "value": null,
                   "visibility": "internal"
                 }
               ],
-              "src": "681:69:4"
+              "src": "807:133:5"
             },
             "returnParameters": {
-              "id": 1065,
+              "id": 1252,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "759:0:4"
+              "src": "949:0:5"
             },
-            "scope": 1074,
-            "src": "663:97:4",
+            "scope": 1270,
+            "src": "784:166:5",
             "stateMutability": "nonpayable",
             "virtual": false,
             "visibility": "external"
           },
           {
-            "functionSelector": "de514b3c",
-            "id": 1073,
+            "body": null,
+            "documentation": null,
+            "functionSelector": "25fb2680",
+            "id": 1262,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
-            "name": "donateETH",
-            "nameLocation": "775:9:4",
+            "name": "donate",
             "nodeType": "FunctionDefinition",
+            "overrides": null,
             "parameters": {
-              "id": 1071,
+              "id": 1260,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 1068,
+                  "id": 1255,
                   "mutability": "mutable",
                   "name": "_campaignId",
-                  "nameLocation": "790:11:4",
                   "nodeType": "VariableDeclaration",
-                  "scope": 1073,
-                  "src": "785:16:4",
+                  "overrides": null,
+                  "scope": 1262,
+                  "src": "1068:19:5",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -960,921 +1050,1270 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 1067,
-                    "name": "uint",
+                    "id": 1254,
+                    "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "785:4:4",
+                    "src": "1068:7:5",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
                     }
                   },
+                  "value": null,
                   "visibility": "internal"
                 },
                 {
                   "constant": false,
-                  "id": 1070,
+                  "id": 1257,
+                  "mutability": "mutable",
+                  "name": "_donorToken",
+                  "nodeType": "VariableDeclaration",
+                  "overrides": null,
+                  "scope": 1262,
+                  "src": "1098:19:5",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 1256,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1098:7:5",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 1259,
+                  "mutability": "mutable",
+                  "name": "_amountInDonorTokens",
+                  "nodeType": "VariableDeclaration",
+                  "overrides": null,
+                  "scope": 1262,
+                  "src": "1128:28:5",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 1258,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1128:7:5",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1057:106:5"
+            },
+            "returnParameters": {
+              "id": 1261,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "1172:0:5"
+            },
+            "scope": 1270,
+            "src": "1042:131:5",
+            "stateMutability": "nonpayable",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "body": null,
+            "documentation": null,
+            "functionSelector": "de514b3c",
+            "id": 1269,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "donateETH",
+            "nodeType": "FunctionDefinition",
+            "overrides": null,
+            "parameters": {
+              "id": 1267,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 1264,
+                  "mutability": "mutable",
+                  "name": "_campaignId",
+                  "nodeType": "VariableDeclaration",
+                  "overrides": null,
+                  "scope": 1269,
+                  "src": "1200:19:5",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 1263,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1200:7:5",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 1266,
                   "mutability": "mutable",
                   "name": "_mail",
-                  "nameLocation": "817:5:4",
                   "nodeType": "VariableDeclaration",
-                  "scope": 1073,
-                  "src": "803:19:4",
+                  "overrides": null,
+                  "scope": 1269,
+                  "src": "1221:21:5",
                   "stateVariable": false,
-                  "storageLocation": "memory",
+                  "storageLocation": "calldata",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_string_memory_ptr",
+                    "typeIdentifier": "t_string_calldata_ptr",
                     "typeString": "string"
                   },
                   "typeName": {
-                    "id": 1069,
+                    "id": 1265,
                     "name": "string",
                     "nodeType": "ElementaryTypeName",
-                    "src": "803:6:4",
+                    "src": "1221:6:5",
                     "typeDescriptions": {
                       "typeIdentifier": "t_string_storage_ptr",
                       "typeString": "string"
                     }
                   },
+                  "value": null,
                   "visibility": "internal"
                 }
               ],
-              "src": "784:39:4"
+              "src": "1199:44:5"
             },
             "returnParameters": {
-              "id": 1072,
+              "id": 1268,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "840:0:4"
+              "src": "1260:0:5"
             },
-            "scope": 1074,
-            "src": "766:75:4",
+            "scope": 1270,
+            "src": "1181:80:5",
             "stateMutability": "payable",
             "virtual": false,
             "visibility": "external"
           }
         ],
-        "scope": 1075,
-        "src": "48:796:4",
-        "usedErrors": []
+        "scope": 1271,
+        "src": "73:1191:5"
       }
     ],
-    "src": "0:844:4"
+    "src": "0:1264:5"
   },
   "legacyAST": {
-    "absolutePath": "/C/Users/Luka/Desktop/SaveChildrenV2.0/client/src/contracts/interfaces/ISupportChildren.sol",
-    "exportedSymbols": {
-      "ISupportChildren": [
-        1074
-      ]
+    "attributes": {
+      "absolutePath": "/C/Users/Luka/Desktop/SupportChildrenV2.0/client/src/contracts/interfaces/ISupportChildren.sol",
+      "exportedSymbols": {
+        "ISupportChildren": [
+          1270
+        ]
+      }
     },
-    "id": 1075,
-    "nodeType": "SourceUnit",
-    "nodes": [
+    "children": [
       {
-        "id": 1007,
-        "literals": [
-          "solidity",
-          "^",
-          "0.8",
-          ".0"
-        ],
-        "nodeType": "PragmaDirective",
-        "src": "0:23:4"
+        "attributes": {
+          "literals": [
+            "solidity",
+            ">=",
+            "0.6",
+            ".0",
+            "<=",
+            "0.8",
+            ".0"
+          ]
+        },
+        "id": 1195,
+        "name": "PragmaDirective",
+        "src": "0:34:5"
       },
       {
-        "id": 1008,
-        "literals": [
-          "abicoder",
-          "v2"
-        ],
-        "nodeType": "PragmaDirective",
-        "src": "25:19:4"
+        "attributes": {
+          "literals": [
+            "experimental",
+            "ABIEncoderV2"
+          ]
+        },
+        "id": 1196,
+        "name": "PragmaDirective",
+        "src": "36:33:5"
       },
       {
-        "abstract": false,
-        "baseContracts": [],
-        "contractDependencies": [],
-        "contractKind": "interface",
-        "fullyImplemented": false,
-        "id": 1074,
-        "linearizedBaseContracts": [
-          1074
-        ],
-        "name": "ISupportChildren",
-        "nameLocation": "58:16:4",
-        "nodeType": "ContractDefinition",
-        "nodes": [
+        "attributes": {
+          "abstract": false,
+          "baseContracts": [
+            null
+          ],
+          "contractDependencies": [
+            null
+          ],
+          "contractKind": "interface",
+          "documentation": null,
+          "fullyImplemented": false,
+          "linearizedBaseContracts": [
+            1270
+          ],
+          "name": "ISupportChildren",
+          "scope": 1271
+        },
+        "children": [
           {
-            "canonicalName": "ISupportChildren.Campaign",
-            "id": 1013,
-            "members": [
-              {
-                "constant": false,
-                "id": 1010,
-                "mutability": "mutable",
-                "name": "endTimestamp",
-                "nameLocation": "114:12:4",
-                "nodeType": "VariableDeclaration",
-                "scope": 1013,
-                "src": "109:17:4",
-                "stateVariable": false,
-                "storageLocation": "default",
-                "typeDescriptions": {
-                  "typeIdentifier": "t_uint256",
-                  "typeString": "uint256"
-                },
-                "typeName": {
-                  "id": 1009,
-                  "name": "uint",
-                  "nodeType": "ElementaryTypeName",
-                  "src": "109:4:4",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_uint256",
-                    "typeString": "uint256"
-                  }
-                },
-                "visibility": "internal"
-              },
-              {
-                "constant": false,
-                "id": 1012,
-                "mutability": "mutable",
-                "name": "beneficiary",
-                "nameLocation": "153:11:4",
-                "nodeType": "VariableDeclaration",
-                "scope": 1013,
-                "src": "137:27:4",
-                "stateVariable": false,
-                "storageLocation": "default",
-                "typeDescriptions": {
-                  "typeIdentifier": "t_address_payable",
-                  "typeString": "address payable"
-                },
-                "typeName": {
-                  "id": 1011,
-                  "name": "address",
-                  "nodeType": "ElementaryTypeName",
-                  "src": "137:15:4",
-                  "stateMutability": "payable",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_address_payable",
-                    "typeString": "address payable"
-                  }
-                },
-                "visibility": "internal"
-              }
-            ],
-            "name": "Campaign",
-            "nameLocation": "89:8:4",
-            "nodeType": "StructDefinition",
-            "scope": 1074,
-            "src": "82:90:4",
-            "visibility": "public"
-          },
-          {
-            "canonicalName": "ISupportChildren.DonationStruct",
-            "id": 1018,
-            "members": [
-              {
-                "constant": false,
-                "id": 1015,
-                "mutability": "mutable",
-                "name": "from",
-                "nameLocation": "228:4:4",
-                "nodeType": "VariableDeclaration",
-                "scope": 1018,
-                "src": "212:20:4",
-                "stateVariable": false,
-                "storageLocation": "default",
-                "typeDescriptions": {
-                  "typeIdentifier": "t_address_payable",
-                  "typeString": "address payable"
-                },
-                "typeName": {
-                  "id": 1014,
-                  "name": "address",
-                  "nodeType": "ElementaryTypeName",
-                  "src": "212:15:4",
-                  "stateMutability": "payable",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_address_payable",
-                    "typeString": "address payable"
-                  }
-                },
-                "visibility": "internal"
-              },
-              {
-                "constant": false,
-                "id": 1017,
-                "mutability": "mutable",
-                "name": "amount",
-                "nameLocation": "251:6:4",
-                "nodeType": "VariableDeclaration",
-                "scope": 1018,
-                "src": "243:14:4",
-                "stateVariable": false,
-                "storageLocation": "default",
-                "typeDescriptions": {
-                  "typeIdentifier": "t_uint256",
-                  "typeString": "uint256"
-                },
-                "typeName": {
-                  "id": 1016,
-                  "name": "uint256",
-                  "nodeType": "ElementaryTypeName",
-                  "src": "243:7:4",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_uint256",
-                    "typeString": "uint256"
-                  }
-                },
-                "visibility": "internal"
-              }
-            ],
-            "name": "DonationStruct",
-            "nameLocation": "187:14:4",
-            "nodeType": "StructDefinition",
-            "scope": 1074,
-            "src": "180:85:4",
-            "visibility": "public"
-          },
-          {
-            "anonymous": false,
-            "id": 1025,
-            "name": "CampaignCreated",
-            "nameLocation": "279:15:4",
-            "nodeType": "EventDefinition",
-            "parameters": {
-              "id": 1024,
-              "nodeType": "ParameterList",
-              "parameters": [
-                {
-                  "constant": false,
-                  "id": 1020,
-                  "indexed": false,
-                  "mutability": "mutable",
-                  "name": "campaignId",
-                  "nameLocation": "300:10:4",
-                  "nodeType": "VariableDeclaration",
-                  "scope": 1025,
-                  "src": "295:15:4",
-                  "stateVariable": false,
-                  "storageLocation": "default",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_uint256",
-                    "typeString": "uint256"
-                  },
-                  "typeName": {
-                    "id": 1019,
-                    "name": "uint",
-                    "nodeType": "ElementaryTypeName",
-                    "src": "295:4:4",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_uint256",
-                      "typeString": "uint256"
-                    }
-                  },
-                  "visibility": "internal"
-                },
-                {
-                  "constant": false,
-                  "id": 1023,
-                  "indexed": false,
-                  "mutability": "mutable",
-                  "name": "campaign",
-                  "nameLocation": "321:8:4",
-                  "nodeType": "VariableDeclaration",
-                  "scope": 1025,
-                  "src": "312:17:4",
-                  "stateVariable": false,
-                  "storageLocation": "default",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_struct$_Campaign_$1013_memory_ptr",
-                    "typeString": "struct ISupportChildren.Campaign"
-                  },
-                  "typeName": {
-                    "id": 1022,
-                    "nodeType": "UserDefinedTypeName",
-                    "pathNode": {
-                      "id": 1021,
-                      "name": "Campaign",
-                      "nodeType": "IdentifierPath",
-                      "referencedDeclaration": 1013,
-                      "src": "312:8:4"
-                    },
-                    "referencedDeclaration": 1013,
-                    "src": "312:8:4",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_struct$_Campaign_$1013_storage_ptr",
-                      "typeString": "struct ISupportChildren.Campaign"
-                    }
-                  },
-                  "visibility": "internal"
-                }
-              ],
-              "src": "294:36:4"
+            "attributes": {
+              "canonicalName": "ISupportChildren.Campaign",
+              "name": "Campaign",
+              "scope": 1270,
+              "visibility": "public"
             },
-            "src": "273:58:4"
-          },
-          {
-            "anonymous": false,
-            "id": 1033,
-            "name": "Donation",
-            "nameLocation": "343:8:4",
-            "nodeType": "EventDefinition",
-            "parameters": {
-              "id": 1032,
-              "nodeType": "ParameterList",
-              "parameters": [
-                {
+            "children": [
+              {
+                "attributes": {
                   "constant": false,
-                  "id": 1027,
-                  "indexed": false,
                   "mutability": "mutable",
-                  "name": "campaignId",
-                  "nameLocation": "357:10:4",
-                  "nodeType": "VariableDeclaration",
-                  "scope": 1033,
-                  "src": "352:15:4",
+                  "name": "endTimestamp",
+                  "overrides": null,
+                  "scope": 1209,
                   "stateVariable": false,
                   "storageLocation": "default",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_uint256",
-                    "typeString": "uint256"
-                  },
-                  "typeName": {
-                    "id": 1026,
-                    "name": "uint",
-                    "nodeType": "ElementaryTypeName",
-                    "src": "352:4:4",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_uint256",
-                      "typeString": "uint256"
-                    }
-                  },
+                  "type": "uint256",
+                  "value": null,
                   "visibility": "internal"
                 },
-                {
+                "children": [
+                  {
+                    "attributes": {
+                      "name": "uint256",
+                      "type": "uint256"
+                    },
+                    "id": 1197,
+                    "name": "ElementaryTypeName",
+                    "src": "134:7:5"
+                  }
+                ],
+                "id": 1198,
+                "name": "VariableDeclaration",
+                "src": "134:20:5"
+              },
+              {
+                "attributes": {
                   "constant": false,
-                  "id": 1029,
-                  "indexed": false,
+                  "mutability": "mutable",
+                  "name": "beneficiary",
+                  "overrides": null,
+                  "scope": 1209,
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "type": "address payable",
+                  "value": null,
+                  "visibility": "internal"
+                },
+                "children": [
+                  {
+                    "attributes": {
+                      "name": "address",
+                      "stateMutability": "payable",
+                      "type": "address payable"
+                    },
+                    "id": 1199,
+                    "name": "ElementaryTypeName",
+                    "src": "165:15:5"
+                  }
+                ],
+                "id": 1200,
+                "name": "VariableDeclaration",
+                "src": "165:27:5"
+              },
+              {
+                "attributes": {
+                  "constant": false,
+                  "mutability": "mutable",
+                  "name": "wantToken",
+                  "overrides": null,
+                  "scope": 1209,
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "type": "address",
+                  "value": null,
+                  "visibility": "internal"
+                },
+                "children": [
+                  {
+                    "attributes": {
+                      "name": "address",
+                      "stateMutability": "nonpayable",
+                      "type": "address"
+                    },
+                    "id": 1201,
+                    "name": "ElementaryTypeName",
+                    "src": "203:7:5"
+                  }
+                ],
+                "id": 1202,
+                "name": "VariableDeclaration",
+                "src": "203:17:5"
+              },
+              {
+                "attributes": {
+                  "constant": false,
+                  "mutability": "mutable",
+                  "name": "hardCap",
+                  "overrides": null,
+                  "scope": 1209,
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "type": "uint256",
+                  "value": null,
+                  "visibility": "internal"
+                },
+                "children": [
+                  {
+                    "attributes": {
+                      "name": "uint256",
+                      "type": "uint256"
+                    },
+                    "id": 1203,
+                    "name": "ElementaryTypeName",
+                    "src": "231:7:5"
+                  }
+                ],
+                "id": 1204,
+                "name": "VariableDeclaration",
+                "src": "231:15:5"
+              },
+              {
+                "attributes": {
+                  "constant": false,
+                  "mutability": "mutable",
+                  "name": "receivedAmount",
+                  "overrides": null,
+                  "scope": 1209,
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "type": "uint256",
+                  "value": null,
+                  "visibility": "internal"
+                },
+                "children": [
+                  {
+                    "attributes": {
+                      "name": "uint256",
+                      "type": "uint256"
+                    },
+                    "id": 1205,
+                    "name": "ElementaryTypeName",
+                    "src": "257:7:5"
+                  }
+                ],
+                "id": 1206,
+                "name": "VariableDeclaration",
+                "src": "257:22:5"
+              },
+              {
+                "attributes": {
+                  "constant": false,
+                  "mutability": "mutable",
+                  "name": "campaignId",
+                  "overrides": null,
+                  "scope": 1209,
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "type": "uint256",
+                  "value": null,
+                  "visibility": "internal"
+                },
+                "children": [
+                  {
+                    "attributes": {
+                      "name": "uint256",
+                      "type": "uint256"
+                    },
+                    "id": 1207,
+                    "name": "ElementaryTypeName",
+                    "src": "290:7:5"
+                  }
+                ],
+                "id": 1208,
+                "name": "VariableDeclaration",
+                "src": "290:18:5"
+              }
+            ],
+            "id": 1209,
+            "name": "StructDefinition",
+            "src": "107:209:5"
+          },
+          {
+            "attributes": {
+              "canonicalName": "ISupportChildren.DonationStruct",
+              "name": "DonationStruct",
+              "scope": 1270,
+              "visibility": "public"
+            },
+            "children": [
+              {
+                "attributes": {
+                  "constant": false,
+                  "mutability": "mutable",
+                  "name": "from",
+                  "overrides": null,
+                  "scope": 1214,
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "type": "address payable",
+                  "value": null,
+                  "visibility": "internal"
+                },
+                "children": [
+                  {
+                    "attributes": {
+                      "name": "address",
+                      "stateMutability": "payable",
+                      "type": "address payable"
+                    },
+                    "id": 1210,
+                    "name": "ElementaryTypeName",
+                    "src": "356:15:5"
+                  }
+                ],
+                "id": 1211,
+                "name": "VariableDeclaration",
+                "src": "356:20:5"
+              },
+              {
+                "attributes": {
+                  "constant": false,
                   "mutability": "mutable",
                   "name": "amount",
-                  "nameLocation": "374:6:4",
-                  "nodeType": "VariableDeclaration",
-                  "scope": 1033,
-                  "src": "369:11:4",
+                  "overrides": null,
+                  "scope": 1214,
                   "stateVariable": false,
                   "storageLocation": "default",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_uint256",
-                    "typeString": "uint256"
-                  },
-                  "typeName": {
-                    "id": 1028,
-                    "name": "uint",
-                    "nodeType": "ElementaryTypeName",
-                    "src": "369:4:4",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_uint256",
-                      "typeString": "uint256"
-                    }
-                  },
+                  "type": "uint256",
+                  "value": null,
                   "visibility": "internal"
                 },
-                {
-                  "constant": false,
-                  "id": 1031,
-                  "indexed": false,
-                  "mutability": "mutable",
-                  "name": "tokenAddress",
-                  "nameLocation": "390:12:4",
-                  "nodeType": "VariableDeclaration",
-                  "scope": 1033,
-                  "src": "382:20:4",
-                  "stateVariable": false,
-                  "storageLocation": "default",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_address",
-                    "typeString": "address"
-                  },
-                  "typeName": {
-                    "id": 1030,
-                    "name": "address",
-                    "nodeType": "ElementaryTypeName",
-                    "src": "382:7:4",
-                    "stateMutability": "nonpayable",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_address",
-                      "typeString": "address"
-                    }
-                  },
-                  "visibility": "internal"
-                }
-              ],
-              "src": "351:52:4"
-            },
-            "src": "337:67:4"
-          },
-          {
-            "functionSelector": "e1e33009",
-            "id": 1040,
-            "implemented": false,
-            "kind": "function",
-            "modifiers": [],
-            "name": "isCampaignActive",
-            "nameLocation": "421:16:4",
-            "nodeType": "FunctionDefinition",
-            "parameters": {
-              "id": 1036,
-              "nodeType": "ParameterList",
-              "parameters": [
-                {
-                  "constant": false,
-                  "id": 1035,
-                  "mutability": "mutable",
-                  "name": "_campaignId",
-                  "nameLocation": "443:11:4",
-                  "nodeType": "VariableDeclaration",
-                  "scope": 1040,
-                  "src": "438:16:4",
-                  "stateVariable": false,
-                  "storageLocation": "default",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_uint256",
-                    "typeString": "uint256"
-                  },
-                  "typeName": {
-                    "id": 1034,
-                    "name": "uint",
-                    "nodeType": "ElementaryTypeName",
-                    "src": "438:4:4",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_uint256",
-                      "typeString": "uint256"
-                    }
-                  },
-                  "visibility": "internal"
-                }
-              ],
-              "src": "437:18:4"
-            },
-            "returnParameters": {
-              "id": 1039,
-              "nodeType": "ParameterList",
-              "parameters": [
-                {
-                  "constant": false,
-                  "id": 1038,
-                  "mutability": "mutable",
-                  "name": "",
-                  "nameLocation": "-1:-1:-1",
-                  "nodeType": "VariableDeclaration",
-                  "scope": 1040,
-                  "src": "478:4:4",
-                  "stateVariable": false,
-                  "storageLocation": "default",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_bool",
-                    "typeString": "bool"
-                  },
-                  "typeName": {
-                    "id": 1037,
-                    "name": "bool",
-                    "nodeType": "ElementaryTypeName",
-                    "src": "478:4:4",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_bool",
-                      "typeString": "bool"
-                    }
-                  },
-                  "visibility": "internal"
-                }
-              ],
-              "src": "477:6:4"
-            },
-            "scope": 1074,
-            "src": "412:72:4",
-            "stateMutability": "view",
-            "virtual": false,
-            "visibility": "external"
-          },
-          {
-            "functionSelector": "5598f8cc",
-            "id": 1048,
-            "implemented": false,
-            "kind": "function",
-            "modifiers": [],
-            "name": "getCampaign",
-            "nameLocation": "499:11:4",
-            "nodeType": "FunctionDefinition",
-            "parameters": {
-              "id": 1043,
-              "nodeType": "ParameterList",
-              "parameters": [
-                {
-                  "constant": false,
-                  "id": 1042,
-                  "mutability": "mutable",
-                  "name": "_campaignId",
-                  "nameLocation": "516:11:4",
-                  "nodeType": "VariableDeclaration",
-                  "scope": 1048,
-                  "src": "511:16:4",
-                  "stateVariable": false,
-                  "storageLocation": "default",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_uint256",
-                    "typeString": "uint256"
-                  },
-                  "typeName": {
-                    "id": 1041,
-                    "name": "uint",
-                    "nodeType": "ElementaryTypeName",
-                    "src": "511:4:4",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_uint256",
-                      "typeString": "uint256"
-                    }
-                  },
-                  "visibility": "internal"
-                }
-              ],
-              "src": "510:18:4"
-            },
-            "returnParameters": {
-              "id": 1047,
-              "nodeType": "ParameterList",
-              "parameters": [
-                {
-                  "constant": false,
-                  "id": 1046,
-                  "mutability": "mutable",
-                  "name": "",
-                  "nameLocation": "-1:-1:-1",
-                  "nodeType": "VariableDeclaration",
-                  "scope": 1048,
-                  "src": "551:15:4",
-                  "stateVariable": false,
-                  "storageLocation": "memory",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_struct$_Campaign_$1013_memory_ptr",
-                    "typeString": "struct ISupportChildren.Campaign"
-                  },
-                  "typeName": {
-                    "id": 1045,
-                    "nodeType": "UserDefinedTypeName",
-                    "pathNode": {
-                      "id": 1044,
-                      "name": "Campaign",
-                      "nodeType": "IdentifierPath",
-                      "referencedDeclaration": 1013,
-                      "src": "551:8:4"
+                "children": [
+                  {
+                    "attributes": {
+                      "name": "uint256",
+                      "type": "uint256"
                     },
-                    "referencedDeclaration": 1013,
-                    "src": "551:8:4",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_struct$_Campaign_$1013_storage_ptr",
-                      "typeString": "struct ISupportChildren.Campaign"
-                    }
-                  },
-                  "visibility": "internal"
-                }
-              ],
-              "src": "550:17:4"
-            },
-            "scope": 1074,
-            "src": "490:78:4",
-            "stateMutability": "view",
-            "virtual": false,
-            "visibility": "external"
+                    "id": 1212,
+                    "name": "ElementaryTypeName",
+                    "src": "387:7:5"
+                  }
+                ],
+                "id": 1213,
+                "name": "VariableDeclaration",
+                "src": "387:14:5"
+              }
+            ],
+            "id": 1214,
+            "name": "StructDefinition",
+            "src": "324:85:5"
           },
           {
-            "functionSelector": "064e1faf",
-            "id": 1055,
-            "implemented": false,
-            "kind": "function",
-            "modifiers": [],
-            "name": "createCampaign",
-            "nameLocation": "583:14:4",
-            "nodeType": "FunctionDefinition",
-            "parameters": {
-              "id": 1053,
-              "nodeType": "ParameterList",
-              "parameters": [
-                {
-                  "constant": false,
-                  "id": 1050,
-                  "mutability": "mutable",
-                  "name": "_beneficiary",
-                  "nameLocation": "614:12:4",
-                  "nodeType": "VariableDeclaration",
-                  "scope": 1055,
-                  "src": "598:28:4",
-                  "stateVariable": false,
-                  "storageLocation": "default",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_address_payable",
-                    "typeString": "address payable"
-                  },
-                  "typeName": {
-                    "id": 1049,
-                    "name": "address",
-                    "nodeType": "ElementaryTypeName",
-                    "src": "598:15:4",
-                    "stateMutability": "payable",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_address_payable",
-                      "typeString": "address payable"
-                    }
-                  },
-                  "visibility": "internal"
-                },
-                {
-                  "constant": false,
-                  "id": 1052,
-                  "mutability": "mutable",
-                  "name": "_endTimestamp",
-                  "nameLocation": "633:13:4",
-                  "nodeType": "VariableDeclaration",
-                  "scope": 1055,
-                  "src": "628:18:4",
-                  "stateVariable": false,
-                  "storageLocation": "default",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_uint256",
-                    "typeString": "uint256"
-                  },
-                  "typeName": {
-                    "id": 1051,
-                    "name": "uint",
-                    "nodeType": "ElementaryTypeName",
-                    "src": "628:4:4",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_uint256",
-                      "typeString": "uint256"
-                    }
-                  },
-                  "visibility": "internal"
-                }
-              ],
-              "src": "597:50:4"
+            "attributes": {
+              "anonymous": false,
+              "documentation": null,
+              "name": "CampaignCreated"
             },
-            "returnParameters": {
-              "id": 1054,
-              "nodeType": "ParameterList",
-              "parameters": [],
-              "src": "656:0:4"
-            },
-            "scope": 1074,
-            "src": "574:83:4",
-            "stateMutability": "nonpayable",
-            "virtual": false,
-            "visibility": "external"
+            "children": [
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "indexed": false,
+                      "mutability": "mutable",
+                      "name": "campaignId",
+                      "overrides": null,
+                      "scope": 1220,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "uint256",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "uint256",
+                          "type": "uint256"
+                        },
+                        "id": 1215,
+                        "name": "ElementaryTypeName",
+                        "src": "439:7:5"
+                      }
+                    ],
+                    "id": 1216,
+                    "name": "VariableDeclaration",
+                    "src": "439:18:5"
+                  },
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "indexed": false,
+                      "mutability": "mutable",
+                      "name": "campaign",
+                      "overrides": null,
+                      "scope": 1220,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "struct ISupportChildren.Campaign",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "contractScope": null,
+                          "name": "Campaign",
+                          "referencedDeclaration": 1209,
+                          "type": "struct ISupportChildren.Campaign"
+                        },
+                        "id": 1217,
+                        "name": "UserDefinedTypeName",
+                        "src": "459:8:5"
+                      }
+                    ],
+                    "id": 1218,
+                    "name": "VariableDeclaration",
+                    "src": "459:17:5"
+                  }
+                ],
+                "id": 1219,
+                "name": "ParameterList",
+                "src": "438:39:5"
+              }
+            ],
+            "id": 1220,
+            "name": "EventDefinition",
+            "src": "417:61:5"
           },
           {
-            "functionSelector": "e5b8a7bc",
-            "id": 1066,
-            "implemented": false,
-            "kind": "function",
-            "modifiers": [],
-            "name": "donateERC",
-            "nameLocation": "672:9:4",
-            "nodeType": "FunctionDefinition",
-            "parameters": {
-              "id": 1064,
-              "nodeType": "ParameterList",
-              "parameters": [
-                {
-                  "constant": false,
-                  "id": 1057,
-                  "mutability": "mutable",
-                  "name": "_campaignId",
-                  "nameLocation": "687:11:4",
-                  "nodeType": "VariableDeclaration",
-                  "scope": 1066,
-                  "src": "682:16:4",
-                  "stateVariable": false,
-                  "storageLocation": "default",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_uint256",
-                    "typeString": "uint256"
-                  },
-                  "typeName": {
-                    "id": 1056,
-                    "name": "uint",
-                    "nodeType": "ElementaryTypeName",
-                    "src": "682:4:4",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_uint256",
-                      "typeString": "uint256"
-                    }
-                  },
-                  "visibility": "internal"
-                },
-                {
-                  "constant": false,
-                  "id": 1059,
-                  "mutability": "mutable",
-                  "name": "_token",
-                  "nameLocation": "708:6:4",
-                  "nodeType": "VariableDeclaration",
-                  "scope": 1066,
-                  "src": "700:14:4",
-                  "stateVariable": false,
-                  "storageLocation": "default",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_address",
-                    "typeString": "address"
-                  },
-                  "typeName": {
-                    "id": 1058,
-                    "name": "address",
-                    "nodeType": "ElementaryTypeName",
-                    "src": "700:7:4",
-                    "stateMutability": "nonpayable",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_address",
-                      "typeString": "address"
-                    }
-                  },
-                  "visibility": "internal"
-                },
-                {
-                  "constant": false,
-                  "id": 1061,
-                  "mutability": "mutable",
-                  "name": "_amount",
-                  "nameLocation": "721:7:4",
-                  "nodeType": "VariableDeclaration",
-                  "scope": 1066,
-                  "src": "716:12:4",
-                  "stateVariable": false,
-                  "storageLocation": "default",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_uint256",
-                    "typeString": "uint256"
-                  },
-                  "typeName": {
-                    "id": 1060,
-                    "name": "uint",
-                    "nodeType": "ElementaryTypeName",
-                    "src": "716:4:4",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_uint256",
-                      "typeString": "uint256"
-                    }
-                  },
-                  "visibility": "internal"
-                },
-                {
-                  "constant": false,
-                  "id": 1063,
-                  "mutability": "mutable",
-                  "name": "_mail",
-                  "nameLocation": "744:5:4",
-                  "nodeType": "VariableDeclaration",
-                  "scope": 1066,
-                  "src": "730:19:4",
-                  "stateVariable": false,
-                  "storageLocation": "memory",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_string_memory_ptr",
-                    "typeString": "string"
-                  },
-                  "typeName": {
-                    "id": 1062,
-                    "name": "string",
-                    "nodeType": "ElementaryTypeName",
-                    "src": "730:6:4",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_string_storage_ptr",
-                      "typeString": "string"
-                    }
-                  },
-                  "visibility": "internal"
-                }
-              ],
-              "src": "681:69:4"
+            "attributes": {
+              "anonymous": false,
+              "documentation": null,
+              "name": "Donation"
             },
-            "returnParameters": {
-              "id": 1065,
-              "nodeType": "ParameterList",
-              "parameters": [],
-              "src": "759:0:4"
-            },
-            "scope": 1074,
-            "src": "663:97:4",
-            "stateMutability": "nonpayable",
-            "virtual": false,
-            "visibility": "external"
+            "children": [
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "indexed": false,
+                      "mutability": "mutable",
+                      "name": "campaignId",
+                      "overrides": null,
+                      "scope": 1228,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "uint256",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "uint256",
+                          "type": "uint256"
+                        },
+                        "id": 1221,
+                        "name": "ElementaryTypeName",
+                        "src": "499:7:5"
+                      }
+                    ],
+                    "id": 1222,
+                    "name": "VariableDeclaration",
+                    "src": "499:18:5"
+                  },
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "indexed": false,
+                      "mutability": "mutable",
+                      "name": "donatedAmountInWantToken",
+                      "overrides": null,
+                      "scope": 1228,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "uint256",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "uint256",
+                          "type": "uint256"
+                        },
+                        "id": 1223,
+                        "name": "ElementaryTypeName",
+                        "src": "519:7:5"
+                      }
+                    ],
+                    "id": 1224,
+                    "name": "VariableDeclaration",
+                    "src": "519:32:5"
+                  },
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "indexed": false,
+                      "mutability": "mutable",
+                      "name": "tokenAddress",
+                      "overrides": null,
+                      "scope": 1228,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "address",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "address",
+                          "stateMutability": "nonpayable",
+                          "type": "address"
+                        },
+                        "id": 1225,
+                        "name": "ElementaryTypeName",
+                        "src": "553:7:5"
+                      }
+                    ],
+                    "id": 1226,
+                    "name": "VariableDeclaration",
+                    "src": "553:20:5"
+                  }
+                ],
+                "id": 1227,
+                "name": "ParameterList",
+                "src": "498:76:5"
+              }
+            ],
+            "id": 1228,
+            "name": "EventDefinition",
+            "src": "484:91:5"
           },
           {
-            "functionSelector": "de514b3c",
-            "id": 1073,
-            "implemented": false,
-            "kind": "function",
-            "modifiers": [],
-            "name": "donateETH",
-            "nameLocation": "775:9:4",
-            "nodeType": "FunctionDefinition",
-            "parameters": {
-              "id": 1071,
-              "nodeType": "ParameterList",
-              "parameters": [
-                {
-                  "constant": false,
-                  "id": 1068,
-                  "mutability": "mutable",
-                  "name": "_campaignId",
-                  "nameLocation": "790:11:4",
-                  "nodeType": "VariableDeclaration",
-                  "scope": 1073,
-                  "src": "785:16:4",
-                  "stateVariable": false,
-                  "storageLocation": "default",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_uint256",
-                    "typeString": "uint256"
-                  },
-                  "typeName": {
-                    "id": 1067,
-                    "name": "uint",
-                    "nodeType": "ElementaryTypeName",
-                    "src": "785:4:4",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_uint256",
-                      "typeString": "uint256"
-                    }
-                  },
-                  "visibility": "internal"
-                },
-                {
-                  "constant": false,
-                  "id": 1070,
-                  "mutability": "mutable",
-                  "name": "_mail",
-                  "nameLocation": "817:5:4",
-                  "nodeType": "VariableDeclaration",
-                  "scope": 1073,
-                  "src": "803:19:4",
-                  "stateVariable": false,
-                  "storageLocation": "memory",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_string_memory_ptr",
-                    "typeString": "string"
-                  },
-                  "typeName": {
-                    "id": 1069,
-                    "name": "string",
-                    "nodeType": "ElementaryTypeName",
-                    "src": "803:6:4",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_string_storage_ptr",
-                      "typeString": "string"
-                    }
-                  },
-                  "visibility": "internal"
-                }
+            "attributes": {
+              "body": null,
+              "documentation": null,
+              "functionSelector": "e1e33009",
+              "implemented": false,
+              "isConstructor": false,
+              "kind": "function",
+              "modifiers": [
+                null
               ],
-              "src": "784:39:4"
+              "name": "isCampaignActive",
+              "overrides": null,
+              "scope": 1270,
+              "stateMutability": "view",
+              "virtual": false,
+              "visibility": "external"
             },
-            "returnParameters": {
-              "id": 1072,
-              "nodeType": "ParameterList",
-              "parameters": [],
-              "src": "840:0:4"
+            "children": [
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "mutability": "mutable",
+                      "name": "_campaignId",
+                      "overrides": null,
+                      "scope": 1235,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "uint256",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "uint256",
+                          "type": "uint256"
+                        },
+                        "id": 1229,
+                        "name": "ElementaryTypeName",
+                        "src": "609:7:5"
+                      }
+                    ],
+                    "id": 1230,
+                    "name": "VariableDeclaration",
+                    "src": "609:19:5"
+                  }
+                ],
+                "id": 1231,
+                "name": "ParameterList",
+                "src": "608:21:5"
+              },
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "mutability": "mutable",
+                      "name": "",
+                      "overrides": null,
+                      "scope": 1235,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "bool",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "bool",
+                          "type": "bool"
+                        },
+                        "id": 1232,
+                        "name": "ElementaryTypeName",
+                        "src": "653:4:5"
+                      }
+                    ],
+                    "id": 1233,
+                    "name": "VariableDeclaration",
+                    "src": "653:4:5"
+                  }
+                ],
+                "id": 1234,
+                "name": "ParameterList",
+                "src": "652:6:5"
+              }
+            ],
+            "id": 1235,
+            "name": "FunctionDefinition",
+            "src": "583:76:5"
+          },
+          {
+            "attributes": {
+              "body": null,
+              "documentation": null,
+              "functionSelector": "5598f8cc",
+              "implemented": false,
+              "isConstructor": false,
+              "kind": "function",
+              "modifiers": [
+                null
+              ],
+              "name": "getCampaign",
+              "overrides": null,
+              "scope": 1270,
+              "stateMutability": "view",
+              "virtual": false,
+              "visibility": "external"
             },
-            "scope": 1074,
-            "src": "766:75:4",
-            "stateMutability": "payable",
-            "virtual": false,
-            "visibility": "external"
+            "children": [
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "mutability": "mutable",
+                      "name": "_campaignId",
+                      "overrides": null,
+                      "scope": 1242,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "uint256",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "uint256",
+                          "type": "uint256"
+                        },
+                        "id": 1236,
+                        "name": "ElementaryTypeName",
+                        "src": "688:7:5"
+                      }
+                    ],
+                    "id": 1237,
+                    "name": "VariableDeclaration",
+                    "src": "688:19:5"
+                  }
+                ],
+                "id": 1238,
+                "name": "ParameterList",
+                "src": "687:21:5"
+              },
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "mutability": "mutable",
+                      "name": "",
+                      "overrides": null,
+                      "scope": 1242,
+                      "stateVariable": false,
+                      "storageLocation": "memory",
+                      "type": "struct ISupportChildren.Campaign",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "contractScope": null,
+                          "name": "Campaign",
+                          "referencedDeclaration": 1209,
+                          "type": "struct ISupportChildren.Campaign"
+                        },
+                        "id": 1239,
+                        "name": "UserDefinedTypeName",
+                        "src": "759:8:5"
+                      }
+                    ],
+                    "id": 1240,
+                    "name": "VariableDeclaration",
+                    "src": "759:15:5"
+                  }
+                ],
+                "id": 1241,
+                "name": "ParameterList",
+                "src": "758:17:5"
+              }
+            ],
+            "id": 1242,
+            "name": "FunctionDefinition",
+            "src": "667:109:5"
+          },
+          {
+            "attributes": {
+              "body": null,
+              "documentation": null,
+              "functionSelector": "e75489c0",
+              "implemented": false,
+              "isConstructor": false,
+              "kind": "function",
+              "modifiers": [
+                null
+              ],
+              "name": "createCampaign",
+              "overrides": null,
+              "scope": 1270,
+              "stateMutability": "nonpayable",
+              "virtual": false,
+              "visibility": "external"
+            },
+            "children": [
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "mutability": "mutable",
+                      "name": "_beneficiary",
+                      "overrides": null,
+                      "scope": 1253,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "address payable",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "address",
+                          "stateMutability": "payable",
+                          "type": "address payable"
+                        },
+                        "id": 1243,
+                        "name": "ElementaryTypeName",
+                        "src": "818:15:5"
+                      }
+                    ],
+                    "id": 1244,
+                    "name": "VariableDeclaration",
+                    "src": "818:28:5"
+                  },
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "mutability": "mutable",
+                      "name": "_endTimestamp",
+                      "overrides": null,
+                      "scope": 1253,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "uint256",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "uint256",
+                          "type": "uint256"
+                        },
+                        "id": 1245,
+                        "name": "ElementaryTypeName",
+                        "src": "857:7:5"
+                      }
+                    ],
+                    "id": 1246,
+                    "name": "VariableDeclaration",
+                    "src": "857:21:5"
+                  },
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "mutability": "mutable",
+                      "name": "wantToken",
+                      "overrides": null,
+                      "scope": 1253,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "address",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "address",
+                          "stateMutability": "nonpayable",
+                          "type": "address"
+                        },
+                        "id": 1247,
+                        "name": "ElementaryTypeName",
+                        "src": "889:7:5"
+                      }
+                    ],
+                    "id": 1248,
+                    "name": "VariableDeclaration",
+                    "src": "889:17:5"
+                  },
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "mutability": "mutable",
+                      "name": "_hardCap",
+                      "overrides": null,
+                      "scope": 1253,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "uint256",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "uint256",
+                          "type": "uint256"
+                        },
+                        "id": 1249,
+                        "name": "ElementaryTypeName",
+                        "src": "917:7:5"
+                      }
+                    ],
+                    "id": 1250,
+                    "name": "VariableDeclaration",
+                    "src": "917:16:5"
+                  }
+                ],
+                "id": 1251,
+                "name": "ParameterList",
+                "src": "807:133:5"
+              },
+              {
+                "attributes": {
+                  "parameters": [
+                    null
+                  ]
+                },
+                "children": [],
+                "id": 1252,
+                "name": "ParameterList",
+                "src": "949:0:5"
+              }
+            ],
+            "id": 1253,
+            "name": "FunctionDefinition",
+            "src": "784:166:5"
+          },
+          {
+            "attributes": {
+              "body": null,
+              "documentation": null,
+              "functionSelector": "25fb2680",
+              "implemented": false,
+              "isConstructor": false,
+              "kind": "function",
+              "modifiers": [
+                null
+              ],
+              "name": "donate",
+              "overrides": null,
+              "scope": 1270,
+              "stateMutability": "nonpayable",
+              "virtual": false,
+              "visibility": "external"
+            },
+            "children": [
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "mutability": "mutable",
+                      "name": "_campaignId",
+                      "overrides": null,
+                      "scope": 1262,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "uint256",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "uint256",
+                          "type": "uint256"
+                        },
+                        "id": 1254,
+                        "name": "ElementaryTypeName",
+                        "src": "1068:7:5"
+                      }
+                    ],
+                    "id": 1255,
+                    "name": "VariableDeclaration",
+                    "src": "1068:19:5"
+                  },
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "mutability": "mutable",
+                      "name": "_donorToken",
+                      "overrides": null,
+                      "scope": 1262,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "address",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "address",
+                          "stateMutability": "nonpayable",
+                          "type": "address"
+                        },
+                        "id": 1256,
+                        "name": "ElementaryTypeName",
+                        "src": "1098:7:5"
+                      }
+                    ],
+                    "id": 1257,
+                    "name": "VariableDeclaration",
+                    "src": "1098:19:5"
+                  },
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "mutability": "mutable",
+                      "name": "_amountInDonorTokens",
+                      "overrides": null,
+                      "scope": 1262,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "uint256",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "uint256",
+                          "type": "uint256"
+                        },
+                        "id": 1258,
+                        "name": "ElementaryTypeName",
+                        "src": "1128:7:5"
+                      }
+                    ],
+                    "id": 1259,
+                    "name": "VariableDeclaration",
+                    "src": "1128:28:5"
+                  }
+                ],
+                "id": 1260,
+                "name": "ParameterList",
+                "src": "1057:106:5"
+              },
+              {
+                "attributes": {
+                  "parameters": [
+                    null
+                  ]
+                },
+                "children": [],
+                "id": 1261,
+                "name": "ParameterList",
+                "src": "1172:0:5"
+              }
+            ],
+            "id": 1262,
+            "name": "FunctionDefinition",
+            "src": "1042:131:5"
+          },
+          {
+            "attributes": {
+              "body": null,
+              "documentation": null,
+              "functionSelector": "de514b3c",
+              "implemented": false,
+              "isConstructor": false,
+              "kind": "function",
+              "modifiers": [
+                null
+              ],
+              "name": "donateETH",
+              "overrides": null,
+              "scope": 1270,
+              "stateMutability": "payable",
+              "virtual": false,
+              "visibility": "external"
+            },
+            "children": [
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "mutability": "mutable",
+                      "name": "_campaignId",
+                      "overrides": null,
+                      "scope": 1269,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "uint256",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "uint256",
+                          "type": "uint256"
+                        },
+                        "id": 1263,
+                        "name": "ElementaryTypeName",
+                        "src": "1200:7:5"
+                      }
+                    ],
+                    "id": 1264,
+                    "name": "VariableDeclaration",
+                    "src": "1200:19:5"
+                  },
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "mutability": "mutable",
+                      "name": "_mail",
+                      "overrides": null,
+                      "scope": 1269,
+                      "stateVariable": false,
+                      "storageLocation": "calldata",
+                      "type": "string",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "string",
+                          "type": "string"
+                        },
+                        "id": 1265,
+                        "name": "ElementaryTypeName",
+                        "src": "1221:6:5"
+                      }
+                    ],
+                    "id": 1266,
+                    "name": "VariableDeclaration",
+                    "src": "1221:21:5"
+                  }
+                ],
+                "id": 1267,
+                "name": "ParameterList",
+                "src": "1199:44:5"
+              },
+              {
+                "attributes": {
+                  "parameters": [
+                    null
+                  ]
+                },
+                "children": [],
+                "id": 1268,
+                "name": "ParameterList",
+                "src": "1260:0:5"
+              }
+            ],
+            "id": 1269,
+            "name": "FunctionDefinition",
+            "src": "1181:80:5"
           }
         ],
-        "scope": 1075,
-        "src": "48:796:4",
-        "usedErrors": []
+        "id": 1270,
+        "name": "ContractDefinition",
+        "src": "73:1191:5"
       }
     ],
-    "src": "0:844:4"
+    "id": 1271,
+    "name": "SourceUnit",
+    "src": "0:1264:5"
   },
   "compiler": {
     "name": "solc",
-    "version": "0.8.6+commit.11564f7e.Emscripten.clang"
+    "version": "0.6.6+commit.6c089d02.Emscripten.clang"
   },
   "networks": {},
   "schemaVersion": "3.4.1",
-  "updatedAt": "2021-08-10T01:57:09.954Z",
+  "updatedAt": "2021-09-05T13:25:24.711Z",
   "devdoc": {
-    "kind": "dev",
-    "methods": {},
-    "version": 1
+    "methods": {}
   },
   "userdoc": {
-    "kind": "user",
-    "methods": {},
-    "version": 1
+    "methods": {}
   }
 }

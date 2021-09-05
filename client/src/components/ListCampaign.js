@@ -1,5 +1,5 @@
 import React, {Fragment, Component} from 'react';
-import DonateCampaign from './DonateCampaign';
+import {tokenName} from "../utils";
 import Web3 from 'web3';
 import SupportChildren from "../abis/SupportChildren.json";
 import flage from '../images/Flageimage.png';
@@ -20,7 +20,8 @@ class ListCampaign extends Component  {
             searchTerm: '',
             isOldestFirst: true,
             campaigns: [],
-            category: ''
+            category: '',
+            isActiveArray: []
         }
     }
 
@@ -62,6 +63,16 @@ class ListCampaign extends Component  {
 
         const addressField = document.getElementById("address")
         addressField.innerHTML = accountWeb3[0]
+
+        web3.eth.getBalance(this.state.account, function(err, result) {
+            if (err) {
+              console.log(err)
+            } else {
+              const val = document.getElementById("value")
+              var res = web3.utils.fromWei(result, "ether")
+              val.innerHTML = parseFloat(res).toFixed(2) + " ETH"
+            }
+        })
     
         const networkId = await web3.eth.net.getId()
         const networkData = await SupportChildren.networks[networkId]
@@ -71,6 +82,19 @@ class ListCampaign extends Component  {
             const contractWeb3 = new web3.eth.Contract(abi, address)
 
             this.setState({contract: contractWeb3})
+
+            const isActiveArray = []
+
+
+            for(var i =0;i<this.state.campaigns.length;i++){
+                var isActive = await contractWeb3.methods.isCampaignActive(parseInt(this.state.campaigns[i].camp_id)-1).call()
+                isActiveArray.push(Boolean(isActive))
+            }
+
+            this.setState({
+                isActiveArray: isActiveArray
+            })
+            
         } else {
             window.alert('Smart contract not deployed to detected network')
         }
@@ -91,7 +115,6 @@ class ListCampaign extends Component  {
     }
     
     toggleSortDate (event) {
-        console.log("evo me")
         this.sortByDate()
     }
 
@@ -114,13 +137,13 @@ class ListCampaign extends Component  {
                     </div>
                     <div className="almost">
                         <select className = "category form-select"  onChange = {e => this.setState({category:e.target.value})}>
-                            <option value = "" selected>Category</option>
+                            <option value = "">Category</option>
                             <option value = "health">Health</option>
                             <option value = "education">Education</option>
                             <option value = "last">Last wish</option>
                             <option value = "ideas">Ideas</option>
                         </select>
-                        <div className="recent" onclick="">
+                        <div className="recent">
                             <button>
                                 <img src={flage} alt="" height="22px" width="22px" style={{float: 'left'}} />
                                 <a>Almost finished</a>  
@@ -134,10 +157,9 @@ class ListCampaign extends Component  {
                         </div>
                         <input type = "text" placeholder = "Search..." onChange = {evt => this.setState({searchTerm: evt.target.value})} className = "search" />
                     </div>
-                    <div classname = "container text-center d-flex" style = {{marginTop: "50px"}}>
+                    <div className = "container text-center d-flex" style = {{marginTop: "50px"}}>
                         {this.state.campaigns.filter((campaign) => {
-                        if(!Boolean(campaign.camp_isfinished)){
-                            console.log(campaign.camp_category)
+                        if(Boolean(this.state.isActiveArray[campaign.camp_id-1])){
                             if(this.state.searchTerm == "" && this.state.category == ""){
                                 return campaign;
                             }else if(campaign.camp_title.toLowerCase().includes(this.state.searchTerm.toLowerCase()) && campaign.camp_category.toLowerCase().includes(this.state.category.toLocaleLowerCase())){
@@ -155,7 +177,7 @@ class ListCampaign extends Component  {
                                     <p style={{color : "#959595", marginBottom: "1px"}}>Created {Moment(campaign.camp_deadline).format('L')}</p>
                                     <progress value = {campaign.camp_raised} max = {campaign.camp_goal} className = "progress"></progress>
 
-                                    <p className = "card-text"><strong>Donated {campaign.camp_raised}</strong> of {campaign.camp_goal}</p>
+                                    <p className = "card-text"><strong>Donated {campaign.camp_raised} {tokenName(campaign.camp_currency)}</strong> of {campaign.camp_goal} {tokenName(campaign.camp_currency)}</p>
                                 </div>
                             </div>
                         ))}

@@ -4,6 +4,7 @@ import Web3 from 'web3';
 import SupportChildren from "../abis/SupportChildren.json";
 import IERC20 from '../abis/IERC20.json';
 import NFT from '../abis/NFT.json';
+import {tokenName, getCampaign} from "../utils";
 
 
 class App extends Component{
@@ -12,21 +13,19 @@ class App extends Component{
         super(props)
         this.state = {
           contract: null,
+          contractAddress: '',
           account: '',
           campaign: '',
           campaignBC: '',
           amount: '',
           email: '',
-          currency: 'eth',
+          currency: '0x0000000000000000000000000000000000000000',
           path: '',
-          dai: '0x5592ec0cfb4dbc12d3ab100b257153436a1f0fea',
-          enj: '0xd7cf37924617bce1569fe6b33414f6b2514aabd0',
           receipt: ''
         }
       }
     
       async componentWillMount() {
-        await this.getCampaign();
         await this.loadWeb3();
         await this.loadBlockchainData();
       } 
@@ -44,12 +43,24 @@ class App extends Component{
     
       async loadBlockchainData() {
         const web3 = window.web3
-        // Load account
+        // Load accoun
         const accountWeb3 = await web3.eth.getAccounts()
         this.setState({account: accountWeb3[0]})
 
+        console.log(accountWeb3[0])
+
         const addressField = document.getElementById("address")
         addressField.innerHTML = accountWeb3[0]
+
+        web3.eth.getBalance(this.state.account, function(err, result) {
+            if (err) {
+              console.log(err)
+            } else {
+              const val = document.getElementById("value")
+              var res = web3.utils.fromWei(result, "ether")
+              val.innerHTML = parseFloat(res).toFixed(2) + " ETH"
+            }
+        })
     
         const networkId = await web3.eth.net.getId()
         const networkData = await SupportChildren.networks[networkId]
@@ -57,12 +68,29 @@ class App extends Component{
             const abi = SupportChildren.abi
             const address = networkData.address
             const contractWeb3 = new web3.eth.Contract(abi, address)
-    
-            const camp = await contractWeb3.methods.campaigns(parseInt(this.state.campaign.camp_id)-1).call()
+
+            const util = await getCampaign()
+
+            this.setState({
+                campaign: util[0],
+                path: util[1]
+            })
+
+
+            const camp = await contractWeb3.methods.getCampaign(parseInt(this.state.campaign.camp_id)-1).call()
+
+            const sveKampanje = await contractWeb3.methods.getCampaigns().call()
+
+            console.log(sveKampanje)
+
+            console.log(camp)
+            
+            const res = await getCampaign()
 
             this.setState({
               contract: contractWeb3,
-              campaignBC: camp
+              contractAddress: address,
+              campaignBC: camp,
             })
     
         } else {
@@ -70,25 +98,9 @@ class App extends Component{
         }
       }
 
-      async getCampaign () {
-        try {
-            const lastItem = window.location.pathname.split("/").pop()
-            const response = await fetch("http://localhost:5000/campaigns/" + lastItem)
-            const jsonData = await response.json()
 
-            this.setState({
-                campaign: jsonData,
-                path: '/campaign-donation/' + jsonData.camp_id
-            })
-
-        } catch (err) {
-            console.log(err.message);
-        }
-    }
-
-    donate = (evt) => {
-        console.log("Evo me")
-        if(this.state.currency == "eth"){
+    donateSwitch = (evt) => {
+        if(this.state.currency == "0x0000000000000000000000000000000000000000"){
             this.donateETH(evt)
         }else{
             this.donateERC(evt)
@@ -99,36 +111,26 @@ class App extends Component{
         evt.preventDefault()
         const web3 = window.web3
 
-        if(parseFloat(this.state.campaign.camp_raised) + parseFloat(this.state.amount) > parseFloat(this.state.campaign.camp_goal)){
-            alert(`The campaign limit is ${this.state.campaign.camp_goal}`)
-            return;
-        }
-        var _token = '';
-        switch (this.state.currency) {
-            case 'dai':
-                _token = this.state.dai;
-                break;
-            case 'enj':
-                _token = this.state.enj;
-                break;
-        }
+        
 
         const abi = IERC20.abi
 
-        const tokenContract = new web3.eth.Contract(abi, _token)
+        const tokenContract = new web3.eth.Contract(abi, this.state.currency)
 
-        await tokenContract.methods.approve("0x27ac2c35b9a33b486259395f3180c65486dfa723", String(this.state.amount*(10**18))).send({from: this.state.account})
+        await tokenContract.methods.approve(this.state.contractAddress, String(this.state.amount*(10**18))).send({from: this.state.account})
         .then(() =>{
-                //uint _campaignId, address _token, uint _amount, string memory _mail
-            this.state.contract.methods.donateERC(parseInt(this.state.campaign.camp_id)-1, _token, String((this.state.amount)*(10**18)),this.state.email)
+            this.state.contract.methods.donate(this.state.campaign.camp_id-1, this.state.currency, String((this.state.amount)*(10**18)))
             .send({from: this.state.account}).once('receipt', (receipt) => {
                 this.setState({
                   receipt: receipt
                 })
+                console.log(receipt)
             })
             .then(async () =>{
                 try {
-                    const body = {raised : (this.state.campaign.camp_raised + parseFloat(this.state.amount))};
+                    const raised = await this.state.contract.methods.getCampaign(this.state.campaign.camp_id-1).call()
+                    console.log(raised.receivedAmount)
+                    const body = {raised : raised.receivedAmount/(10**18)};
                     const response = await fetch(`http://localhost:5000/campaigns/${this.state.campaign.camp_id}`, {
                         method: "PUT",
                         headers: {"Content-Type" : "application/json"},
@@ -139,32 +141,17 @@ class App extends Component{
                 } catch (err) {
                     console.log(err.message);
                 }
-            }).then(async () => {
-            if(parseFloat(this.state.campaign.camp_raised) + parseFloat(this.state.amount) == parseFloat(this.state.campaign.camp_goal)){
-                try {
-                const body = {isFinished: Boolean(true)}
-                const response = await fetch(`http://localhost:5000/campaigns/${this.state.campaign.camp_id}/finish`, {
-                    method: "PUT",
-                    headers: {"Content-Type" : "application/json"},
-                    body: JSON.stringify(body)
-                });
-                } catch (err) {
-                console.log(err.message)
-                }
-            }
-            
-            })
-        }).then(async() =>{
-            const networkId = await web3.eth.net.getId();
-            const networkData = NFT.networks[networkId];
-            if(networkData){
-                const abi = NFT.abi;
-                const address = networkData.address
-                const nft = new web3.eth.Contract(abi, address)
+            }).then(async() =>{
+                const networkId = await web3.eth.net.getId();
+                const networkData = NFT.networks[networkId];
+                if(networkData){
+                    const abi = NFT.abi;
+                    const address = networkData.address
+                    const nft = new web3.eth.Contract(abi, address)
 
-                nft.methods.mint(this.state.receipt, this.state.account).send({from: "0x2B44f59c4674dbad478e65961a586Dd98c439BD4"
+                    nft.methods.mint(this.state.receipt, this.state.account).send({from: this.state.account})
+                }
             })
-            }
         })
         
     }
@@ -172,19 +159,16 @@ class App extends Component{
     donateETH = (evt) =>{
         evt.preventDefault();
 
-        console.log(this.state.campaign.camp_raised + this.state.amountETH)
-
-        if(parseFloat(this.state.campaign.camp_raised) + parseFloat(this.state.amount) > parseFloat(this.state.campaign.camp_goal)){
-          alert(`The campaign limit is ${this.state.campaign.camp_goal}`)
-          return;
-        }
+        
         const web3 = window.web3
-
-        this.state.contract.methods.donateETH(parseInt(this.state.campaign.camp_id)-1, this.state.email)
+        var campId = this.state.campaign.camp_id-1
+        this.state.contract.methods.donateETH(campId, this.state.email)
         .send({from: this.state.account, value: parseFloat(this.state.amount)*(10**18)})
         .then(async () =>{
             try {
-                const body = {raised : (this.state.campaign.camp_raised + parseFloat(this.state.amountETH))};
+                const raised = await this.state.contract.methods.getCampaign(this.state.campaign.camp_id-1).call()
+                console.log(raised.receivedAmount)
+                const body = {raised : raised.receivedAmount/(10**18)};
                 const response = await fetch(`http://localhost:5000/campaigns/${this.state.campaign.camp_id}`, {
                     method: "PUT",
                     headers: {"Content-Type" : "application/json"},
@@ -195,21 +179,6 @@ class App extends Component{
             } catch (err) {
                 console.log(err.message);
             }
-        }).then(async () => {
-          console.log("usao sam")
-          if(parseFloat(this.state.campaign.camp_raised) + parseFloat(this.state.amount) == parseFloat(this.state.campaign.camp_goal)){
-            try {
-              const body = {isFinished: Boolean(true)}
-              const response = await fetch(`http://localhost:5000/campaigns/${this.state.campaign.camp_id}/finish`, {
-                method: "PUT",
-                headers: {"Content-Type" : "application/json"},
-                body: JSON.stringify(body)
-              });
-            } catch (err) {
-              console.log(err.message)
-            }
-          }
-          
         }).then(async() =>{
             const networkId = await web3.eth.net.getId();
             const networkData = NFT.networks[networkId];
@@ -218,8 +187,7 @@ class App extends Component{
                 const address = networkData.address
                 const nft = new web3.eth.Contract(abi, address)
 
-                nft.methods.mint(this.state.receipt, this.state.account).send({from: "0x2B44f59c4674dbad478e65961a586Dd98c439BD4"
-            })
+                nft.methods.mint(this.state.account, this.state.receipt).send({from: this.state.account})
             }
         })
     }
@@ -238,6 +206,7 @@ class App extends Component{
                 <p>THANK YOU FOR DONATING:</p>
                 <a>{this.state.campaign.camp_title}</a>
                 </div>
+                {this.state.campaignBC}
             </div>
             </div>
             <div>
@@ -254,16 +223,16 @@ class App extends Component{
             </form>
             <div className="listofitems" style={{float:'right'}}>
                 <select style={{borderStyle: 'none', fontSize:'30px',fontFamily: 'Bebas Neue', width: '80px', marginRight: '50px', marginTop: '-50px'}} onChange = {evt => this.setState({currency: evt.target.value})}>
-                <option value="eth">ETH</option>
-                <option value="dai">DAI</option>
-                <option value="enj">ENJ</option>
-                <option value="sand">SAND</option>
-                <option value="ant">ANT</option>
+                <option value="0x0000000000000000000000000000000000000000">ETH</option>
+                <option value="0xdc31ee1784292379fbb2964b3b9c4124d8f89c60">DAI</option>
+                <option value="0xf629cbd94d3791c9250152bd8dfbdf380e2a3b9c">ENJ</option>
+                <option value="0x3845badAde8e6dFF049820680d1F14bD3903a5d0">SAND</option>
+                <option value="0xa117000000f279d81a1d3cc75430faa017fa5a2e">ANT</option>
                 </select>
             </div>
             </div>
             <div>
-                <button className="buttonFundCamp" type="button" onClick={evt => this.donate(evt)}>Donate Now</button>
+                <button className="buttonFundCamp" type="button" onClick={evt => this.donateSwitch(evt)}>Donate Now</button>
             </div>
             </div>
             <div className="claimnft" >

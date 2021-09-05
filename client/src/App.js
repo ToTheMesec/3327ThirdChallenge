@@ -59,6 +59,16 @@ class App extends Component{
     const addressField = document.getElementById("address")
     addressField.innerHTML = accountWeb3[0]
 
+    web3.eth.getBalance(this.state.account, function(err, result) {
+      if (err) {
+        console.log(err)
+      } else {
+        const val = document.getElementById("value")
+        var res = web3.utils.fromWei(result, "ether")
+        val.innerHTML = parseFloat(res).toFixed(2) + " ETH"
+      }
+    })
+
     const networkId = await web3.eth.net.getId()
     const networkData = await SupportChildren.networks[networkId]
     if(networkData) {

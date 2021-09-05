@@ -36,6 +36,8 @@ export default function Header() {
                         <li><NavLink exact to="/discover" style = {{textDecoration: 'none', color: "#484344", fontFamily: "Jost", fontWeight: 700, fontSize: "17px"}} activeStyle = {{color: "black"}}>Discover</NavLink></li>
                         <li><NavLink to="/create-campaign" style = {{textDecoration: 'none', color: "#484344", fontFamily: "Jost", fontWeight: 700, fontSize: "17px"}} activeStyle={{color: 'black'}}>Start your campaign</NavLink></li>
                         <li><NavLink exact to="/user-dashboard" style = {{textDecoration: 'none', color: "#484344", fontFamily: "Jost", fontWeight: 700, fontSize: "17px"}} activeStyle = {{color: "black"}}>Dashboard</NavLink></li>
+                        <li><NavLink exact to="/layer-2" style = {{textDecoration: 'none', color: "#484344", fontFamily: "Jost", fontWeight: 700, fontSize: "17px"}} activeStyle = {{color: "black"}}>Layer2</NavLink></li>
+
                     </ul>
                     <div className="acc">
                         <a id = "value">Value</a>

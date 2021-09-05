@@ -1,9 +1,11 @@
 import React, {Fragment, Component} from 'react';
+import {tokenName} from "../utils";
 import logo from '../logo.svg';
 import Web3 from 'web3';
 import SupportChildren from "../abis/SupportChildren.json";
 import '../App.css';
 import {NavLink} from 'react-router-dom';
+import Moment from 'moment';
 
 class CampaignView extends Component {
 
@@ -17,7 +19,9 @@ class CampaignView extends Component {
           amountETH: '',
           amountERC: '',
           email: '',
-          path: ''
+          path: '',
+          donors: [],
+          allDonors: []
         }
       }
     
@@ -46,6 +50,16 @@ class CampaignView extends Component {
 
         const addressField = document.getElementById("address")
         addressField.innerHTML = accountWeb3[0]
+
+        web3.eth.getBalance(this.state.account, function(err, result) {
+          if (err) {
+            console.log(err)
+          } else {
+            const val = document.getElementById("value")
+            var res = web3.utils.fromWei(result, "ether")
+            val.innerHTML = parseFloat(res).toFixed(2) + " ETH"
+          }
+        })
     
         const networkId = await web3.eth.net.getId()
         const networkData = await SupportChildren.networks[networkId]
@@ -54,11 +68,17 @@ class CampaignView extends Component {
             const address = networkData.address
             const contractWeb3 = new web3.eth.Contract(abi, address)
     
-            const camp = await contractWeb3.methods.campaigns(parseInt(this.state.campaign.camp_id)-1).call()
+            const camp = await contractWeb3.methods.campaigns(parseInt(this.state.campaign.camp_id-1)).call()
+            console.log(camp)
+
+            const donors = await contractWeb3.methods.getDonors(this.state.campaign.camp_id-1).call()
+            console.log(donors)
 
             this.setState({
               contract: contractWeb3,
-              campaignBC: camp
+              campaignBC: camp,
+              allDonors: donors,
+              donors: donors.slice(0, 3)
             })
     
         } else {
@@ -100,11 +120,11 @@ class CampaignView extends Component {
                       <div className="timeleft">
                         <div className="timetext">Time left</div>
                         <div className="timeclock">
-                          <a>50 days 20 hours 38 minutes</a>
+                          <a>{Moment(this.state.campaign.camp_deadline).format('L')}</a>
                         </div>
                       </div>
                       <div className="buttonPos">
-                        <NavLink to = {this.state.path}><button className="buttonCamp" type="button" onclick="#">Donate Now</button></NavLink>
+                        <NavLink to = {this.state.path}><button className="buttonCamp" type="button">Donate Now</button></NavLink>
                       </div>
                       <div>
                         <progress id="file" value={this.state.campaign.camp_raised} max={this.state.campaign.camp_goal}></progress>
@@ -114,18 +134,14 @@ class CampaignView extends Component {
                       </div>
                       <div style = {{fontFamily: 'Bebas Neue'}}>
                         <div className="lasttopdon" style={{fontSize:'22px'}}>Top donators</div>
-                        <div className='listofdon'>
-                          <a>Metamask</a>
-                          <a style={{float:'right'}}>Amount</a>
-                        </div>
-                        <div className='listofdon'>
-                          <a>Metamask</a>
-                          <a style={{float:'right'}}>Amount</a>
-                        </div>
-                        <div className='listofdon'>
-                          <a>Metamask</a>
-                          <a style={{float:'right'}}>Amount</a>
-                        </div>
+                        {this.state.donors.map(donor => (
+                          <div className = "listofdon">
+                            <a>{donor.from}</a>
+                            <a style = {{float:'right'}}>{parseFloat(donor.amount/(10**18)).toFixed(2)} {tokenName(this.state.campaign.camp_currency)}</a>
+                          </div>
+                        ))
+
+                        }
                         <div className="dono">
                           <button className="seealldonators" type="button"  onclick="#" data-toggle="modal" data-target="#exampleModal">See all donators</button>
                         </div>
@@ -146,23 +162,26 @@ class CampaignView extends Component {
               </div>
             </div>
 
-            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <div className="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div className="modal-dialog" role="document">
+              <div className="modal-content">
+                <div className="modal-header">
+                  <h5 className="modal-title" id="exampleModalLabel">Donors</h5>
+                  <button type="button" className="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                   </button>
                 </div>
-                <div class="modal-body">
-                  {
-
+                <div className="modal-body">
+                  {this.state.allDonors.map(donor => (
+                    <div className = "listofdon">
+                      <a>{donor.from}</a>
+                      <a style = {{float:'right'}}>{parseFloat(donor.amount/(10**18)).toFixed(2)} {tokenName(this.state.campaign.camp_currency)}</a>
+                  </div>
+                  ))
                   }
                 </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                  <button type="button" class="btn btn-primary">Save changes</button>
                 </div>
               </div>
             </div>
