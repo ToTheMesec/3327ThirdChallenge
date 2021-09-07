@@ -199,7 +199,7 @@ contract SupportChildren is Ownable, ISupportChildren {
 
         campaigns[_campaignId].receivedAmount += _swapReturnValues[1];
 
-        updateDonations(_campaignId, msg.sender, _swapReturnValues[1], "kitabobanova@mail.com");
+        updateDonations(_campaignId, msg.sender, _swapReturnValues[1], "name@mail.com");
 
         emit Donation(_campaignId, _swapReturnValues[1], _donorToken);
         return;
