@@ -1760,9 +1760,38 @@ ol{
 }
 
 .depositBox input {
-    width: 231px;
+    width: 256px;
+    margin-right: 43px;
+    margin-left: -27px;
 }
 
+.depositBox input::placeholder {
+    font-family: Open Sans;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 14px;
+    line-height: 150%;
+/* identical to box height, or 21px */
+
+    letter-spacing: -0.02em;
+
+    color: #959595;
+    
+}
+
+.depositBox h3 {
+    font-family: 'Bebas Neue';
+    font-style: normal;
+    font-weight: normal;
+    font-size: 27px;
+    line-height: 29px;
+
+
+    text-align: center;
+    letter-spacing: 0.05em;
+
+    color: #000000;
+}
 
 .withdrawBox{
     font-family: 'Bebas Neue';
@@ -1777,7 +1806,35 @@ ol{
 }
 
 .withdrawBox input{
-    width: 231px;
+    width: 256px;
+    margin-left: -7px;
+    margin-right: 42px;
+}
+
+.withdrawBox input::placeholder {
+    font-family: 'Open Sans';
+    font-style: normal;
+    font-weight: bold;
+    font-size: 14px;
+    line-height: 150%;
+    /* identical to box height, or 21px */
+
+    letter-spacing: -0.02em;
+
+color: #959595;
+}
+
+.withdrawBox h3 {
+
+    font-family: 'Bebas Neue';
+    font-style: normal;
+    font-weight: normal;
+    font-size: 27px;
+    line-height: 29px;
+    text-align: center;
+    letter-spacing: 0.05em;
+
+    color: #000000;
 }
 
 .burnBox{
@@ -1795,24 +1852,70 @@ ol{
 .burnBox select{
 
     width: 400px;
-    margin-left: 40px;
+    margin-left: 52px;
 }
 
 .burnBox input{
     width: 231px;
 }
 
+.burnBox h3 {
+
+   
+
+/* H3 */
+
+    font-family: 'Bebas Neue';
+    font-style: normal;
+    font-weight: normal;
+    font-size: 27px;
+    line-height: 29px;
+/* identical to box height */
+
+    text-align: center;
+    letter-spacing: 0.05em;
+
+    color: #000000;
+
+}
+
+.burnParagraph {
+
+    font-family: 'Open Sans';
+    font-style: normal;
+    font-weight: bold;
+    font-size: 14px;
+    line-height: 150%;
+/* identical to box height, or 21px */
+
+    letter-spacing: -0.02em;
+
+    color: #000000;
+    margin-left: -100px;
+
+}
+
 .burnBtn{
-    font-family: 'Bebas Neue' !important;
     background: #42FF8D;
     border-radius: 6px;
     text-align: center;
     color:rgb(29, 27, 27);
-    font-size: 18px;
-    font-weight: 400;
-    line-height: 24px;
     margin-top: 20px;
     width: 400px;
     height: 40px;
+   
+    font-family: Open Sans;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 24px;
+/* identical to box height, or 150% */
+
+    text-align: center;
+    font-feature-settings: 'salt' on, 'liga' off;
+
+/* Button text color */
+
+    color: #212121;
 
 }

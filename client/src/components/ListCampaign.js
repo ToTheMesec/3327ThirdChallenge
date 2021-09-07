@@ -91,6 +91,12 @@ class ListCampaign extends Component  {
                 isActiveArray.push(Boolean(isActive))
             }
 
+            var kampanja = await contractWeb3.methods.getCampaign(2).call()
+
+            console.log(kampanja)
+
+            console.log(isActiveArray)
+
             this.setState({
                 isActiveArray: isActiveArray
             })

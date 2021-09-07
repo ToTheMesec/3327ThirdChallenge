@@ -69,7 +69,9 @@ class CampaignView extends Component {
             const contractWeb3 = new web3.eth.Contract(abi, address)
     
             const camp = await contractWeb3.methods.campaigns(parseInt(this.state.campaign.camp_id-1)).call()
+            var bool = await contractWeb3.methods.isCampaignActive(parseInt(this.state.campaign.camp_id-1)).call()
             console.log(camp)
+            console.log(bool)
 
             const donors = await contractWeb3.methods.getDonors(this.state.campaign.camp_id-1).call()
             console.log(donors)
@@ -135,7 +137,7 @@ class CampaignView extends Component {
                       <div style = {{fontFamily: 'Bebas Neue'}}>
                         <div className="lasttopdon" style={{fontSize:'22px'}}>Top donators</div>
                         {this.state.donors.map(donor => (
-                          <div className = "listofdon">
+                          <div  className = "listofdon">
                             <a>{donor.from}</a>
                             <a style = {{float:'right'}}>{parseFloat(donor.amount/(10**18)).toFixed(2)} {tokenName(this.state.campaign.camp_currency)}</a>
                           </div>
@@ -143,7 +145,7 @@ class CampaignView extends Component {
 
                         }
                         <div className="dono">
-                          <button className="seealldonators" type="button"  onclick="#" data-toggle="modal" data-target="#exampleModal">See all donators</button>
+                          <button className="seealldonators" type="button" data-toggle="modal" data-target="#exampleModal">See all donators</button>
                         </div>
                       </div>
                   
@@ -162,7 +164,7 @@ class CampaignView extends Component {
               </div>
             </div>
 
-            <div className="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div className="modal fade" id="exampleModal" tabIndex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div className="modal-dialog" role="document">
               <div className="modal-content">
                 <div className="modal-header">
@@ -180,8 +182,8 @@ class CampaignView extends Component {
                   ))
                   }
                 </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <div className="modal-footer">
+                  <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
                 </div>
               </div>
             </div>

@@ -31,11 +31,12 @@ class L2View extends Component {
             inputBurn: '', 
             inputWithdraw: '',
             currencyDeposit: '',
-            currencyBurn: '',
+            currencyBurn: '0x0000000000000000000000000000000000000000',
             currencyWithdraw: '',
             campaigns: [],
             usersCampaigns: [],
-            selectedCampaign: ''
+            selectedCampaign: '',
+            id: 60
         }
     }
 
@@ -78,7 +79,6 @@ class L2View extends Component {
 
       this.setState({maticProvider: maticProvider, ethereumProvider: ethereumProvider, campaigns: await getCampaigns()})
 
-      console.log(this.state.campaigns)
 
       //POLYGON
 
@@ -120,27 +120,14 @@ class L2View extends Component {
           const contractWeb3 = new web3.eth.Contract(abi, address)
 
           this.setState({contract: contractWeb3})
-          console.log(contractWeb3)
 
-          const campaignsContract = await contractWeb3.methods.getCampaigns().call()
           const indices = []
           const isActiveArray = []
           const usersCampaigns = []
 
-          for(var i =0;i<campaignsContract.length;i++){
-            if(campaignsContract[i].beneficiary == this.state.account)
-              indices.push(i+1);
-          }
-
-
-          for(var i =0;i<this.state.campaigns.length;i++){
-            var isActive = await contractWeb3.methods.isCampaignActive(parseInt(this.state.campaigns[i].camp_id)-1).call()
-            isActiveArray.push(Boolean(isActive))
-          }
-
           for(var i =0;i<this.state.campaigns.length;i++){
             var campaign = this.state.campaigns[i]
-            if(indices.includes(parseInt(campaign.camp_id)) && !Boolean(isActiveArray[campaign.camp_id-1]) && !Boolean(campaign.camp_withdraw)){
+            if(campaign.camp_beneficiary == this.state.account && !Boolean(campaign.camp_isActive) && !Boolean(campaign.camp_withdraw)){
               usersCampaigns.push(campaign)
             }
           }
@@ -190,9 +177,9 @@ class L2View extends Component {
     };
 
     burnEther = async () => {
-      console.log("burnEther")
+      console.log("burnEther" + this.state.selectedCampaign)
       const maticPoSClient = this.posClientChild();
-      const x = 0.2 * 1000000000000000000; //TODO inputValue
+      const x = this.state.selectedCampaign * 1000000000000000000; //TODO inputValue
       const x1 = x.toString();
       await maticPoSClient
           .burnERC20(config.l2.posWETH, x1, {
@@ -202,7 +189,18 @@ class L2View extends Component {
               console.log("Burn hash: " + res.transactionHash);
               this.setState({burnHash: res.transactionHash});
 
-          });
+          }).then(async () =>{
+            try {
+                const body = {withdrawn: Boolean(true)};
+                const response = await fetch(`http://localhost:5000/campaigns/withdraw/${this.state.id}`, {
+                    method: "PUT",
+                    headers: {"Content-Type" : "application/json"},
+                    body: JSON.stringify(body)
+                });
+            } catch (err) {
+                console.log(err.message)
+            }
+        });
     };
 
     exitEther = async () => {
@@ -214,12 +212,49 @@ class L2View extends Component {
           })
           .then((res) => {
               console.log("exit o/p", res);
-          });
+          })
     };
 
-    onchange (e) {
-      this.setState({inputValue: e.target.value});
+    depositERC20 = async () => {
+      const maticPoSClient = this.posClientParent();
+      const x = this.state.inputDeposit * 1000000000000000000; // 18 decimals
+      const x1 = x.toString();
+      await maticPoSClient.approveERC20ForDeposit(this.state.currencyDeposit, x1, {
+        from: this.state.account,
+      });
+      await maticPoSClient.depositERC20ForUser(this.state.currencyDeposit, this.state.account, x1, {
+        from: this.state.account,
+      });
     };
+
+    burnERC20 = async () => {
+      const maticPoSClient = this.posClientChild();
+      const x = this.state.inputBurn * 1000000000000000000;
+      const x1 = x.toString();
+      await maticPoSClient
+        .burnERC20(this.state.currencyBurn, x1, {
+          from: this.state.account,
+        })
+        .then((res) => {
+          this.setState({burnHash: res.transactionHash});
+        });
+    }
+
+    depositSwitch = () => {
+      if(this.state.currencyDeposit == "0x0000000000000000000000000000000000000000"){
+        this.depositEther()
+      }else{
+        this.depositERC20()
+      }
+    }
+
+    burnSwitch = () => {
+      if(this.state.currencyBurn == "0x0000000000000000000000000000000000000000"){
+        this.burnEther()
+      }else{
+        this.burnERC20()
+      }
+    }
 
     render(){
         return(
@@ -232,24 +267,24 @@ class L2View extends Component {
                       <input className = 'form-control' type = "number" step = "0.0000001" placeholder = "Deposit amount" onChange = {evt => this.setState({inputDeposit: evt.target.value})}/>
                       <select id="kripto" onChange = {evt => this.setState({currencyDeposit: evt.target.value})}>
                         <option value="0x0000000000000000000000000000000000000000">ETH</option>
-                        <option value="0x6b175474e89094c44da98b954eedeac495271d0f">DAI</option>
+                        <option value="0xdc31ee1784292379fbb2964b3b9c4124d8f89c60">DAI</option>
                         <option value="0xf629cbd94d3791c9250152bd8dfbdf380e2a3b9c">ENJ</option>
                         <option value="0x3845badAde8e6dFF049820680d1F14bD3903a5d0">SAND</option>
                         <option value="0xa117000000f279d81a1d3cc75430faa017fa5a2e">ANT</option>
                       </select>
                     </div>
-                    <button className = "burnBtn" onClick={this.depositEther} disabled={ this.state.Networkid !== 0 && this.state.Networkid === config.l2.MATIC_CHAINID }>DEPOSIT</button>
+                    <button className = "burnBtn" onClick={this.depositSwitch} disabled={ this.state.Networkid !== 0 && this.state.Networkid === config.l2.MATIC_CHAINID }>DEPOSIT</button>
                   </div>
                   <div className = "burnBox">
                     <h3 >BURN THE ASSETS FROM POLYGON</h3>
-                    <select className = 'form-select' onChange = {evt => this.setState({selectedCampaign: evt.target.value})}>
-                      <option>Pick your campaign</option>
+                    <select className = 'form-select' onChange = {evt => this.setState({selectedCampaign: evt.target.value, id: evt.target[evt.target.selectedIndex].id})}>
+                      <option id = {69}>Pick your campaign</option>
                         {this.state.usersCampaigns.map((campaign) => (
-                          <option key = {campaign.camp_id} value = {campaign.camp_l2raised}>{campaign.camp_title}</option>
+                          <option key = {campaign.camp_id} id = {campaign.camp_id+0} value = {campaign.camp_l2raised}>{campaign.camp_title}</option>
                         ))}
                     </select>
                     <div  style = {{display: "flex", marginLeft: '60px', marginTop: '20px'}}>
-                      <input className = 'form-control' type = "number" step = "0.0000001" placeholder = {this.state.selectedCampaign} onChange = {evt => this.setState({inputBurn: evt.target.value})} disabled/>
+                      <input className = 'form-control' type = "number" step = "0.0000001" placeholder = {this.state.selectedCampaign} onChange = {evt => this.setState({inputBurn: this.state.selectedCampaign})} disabled/>
                       <select id="kripto" onChange = {evt => this.setState({currencyBurn: evt.target.value})}>
                         <option value="0x0000000000000000000000000000000000000000">ETH</option>
                         <option value="0x6b175474e89094c44da98b954eedeac495271d0f">DAI</option>
@@ -258,13 +293,13 @@ class L2View extends Component {
                         <option value="0xa117000000f279d81a1d3cc75430faa017fa5a2e">ANT</option>
                       </select>
                     </div>
-                    <button className = "burnBtn" onClick={this.burnEther} onChange = {evt => this.setState({inputBurn: this.state.selectedCampaign})} disabled={this.state.Networkid !== 0 && this.state.Networkid === config.l2.ETHEREUM_CHAINID}>Burn</button>
-                    <p style = {{textAlign: 'left', marginLeft: '90px', marginTop: '20px'}}>Burn hash: {this.state.burnHash}</p>
+                    <button className = "burnBtn" onClick={this.burnSwitch} onChange = {evt => this.setState({inputBurn: this.state.selectedCampaign})} disabled={this.state.Networkid !== 0 && this.state.Networkid === config.l2.ETHEREUM_CHAINID}>Burn</button>
+                    <p className = "burnParagraph">Burn hash: {this.state.burnHash}</p>
                   </div>
                   <div className = "withdrawBox">
                   <h3>Withdraw the amount that you have burned</h3>
                     <div  style = {{display: "flex", marginLeft: '60px', marginTop: '20px'}}>
-                      <input className = 'form-control' placeholder = "Withdraw amount" onChange = {evt => this.setState({inputWithdraw: evt.target.value})}/>
+                      <input className = 'form-control' placeholder = "Place the burn hash" onChange = {evt => this.setState({inputWithdraw: evt.target.value})}/>
                       <select id="kripto" onChange = {evt => this.setState({currencyWithdraw: evt.target.value})}>
                         <option value="0x0000000000000000000000000000000000000000">ETH</option>
                         <option value="0x6b175474e89094c44da98b954eedeac495271d0f">DAI</option>

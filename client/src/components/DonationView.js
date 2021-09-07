@@ -32,7 +32,7 @@ class App extends Component{
           receipt: '',
           maticProvider: '',
           ethereumProvider: '',
-          donoSwitch: ''
+          donoSwitch: 'mainnet'
         }
       }
     
@@ -164,14 +164,40 @@ class App extends Component{
             }
         }else{
             if(this.state.currency == "0x0000000000000000000000000000000000000000"){
-                this.depositEther()
+                this.depositEtherPoly()
             }else{
-                // this.depositERC20Poly(evt)
+                this.depositERC20Poly(evt)
             }
         }
     }
 
-    depositEther = async () => {
+    depositERC20 = async () => {
+        const maticPoSClient = this.posClientParent();
+        const x = this.state.inputDeposit * 1000000000000000000; // 18 decimals
+        const x1 = x.toString();
+        await maticPoSClient.approveERC20ForDeposit(this.state.currencyDeposit, x1, {
+          from: this.state.account,
+        });
+        await maticPoSClient.depositERC20ForUser(this.state.currencyDeposit, this.state.account, x1, {
+          from: this.state.account,
+        }).then(async () => {
+            try {
+                const raised = parseFloat(this.state.campaign.camp_l2raised) + parseFloat(this.state.amount)
+                const body = {raised : raised}
+                const response = await fetch(`http://localhost:5000/campaigns/layer2/${this.state.campaign.camp_id}`, {
+                    method: "PUT",
+                    headers: {"Content-Type" : "application/json"},
+                    body: JSON.stringify(body)
+                });
+            } catch (err) {
+                console.log(err.message)
+            }
+        });
+      };
+
+
+
+    depositEtherPoly = async () => {
         console.log("depositEther")
         const maticPoSClient = this.posClientParent();
         const x = this.state.amount * 1000000000000000000; // 18 decimals //TODO inputValue
@@ -182,9 +208,35 @@ class App extends Component{
         }).then(async () => {
             try {
                 const raised = parseFloat(this.state.campaign.camp_l2raised) + parseFloat(this.state.amount)
-                console.log(raised)
                 const body = {raised : raised}
                 const response = await fetch(`http://localhost:5000/campaigns/layer2/${this.state.campaign.camp_id}`, {
+                    method: "PUT",
+                    headers: {"Content-Type" : "application/json"},
+                    body: JSON.stringify(body)
+                });
+            } catch (err) {
+                console.log(err.message)
+            }
+        }).then(async () => {
+            try {
+                const raised = parseFloat(this.state.amount) + parseFloat(this.state.campaign.camp_raised) 
+
+                const body = {raised: raised}
+
+                const response = await fetch(`http://localhost:5000/campaigns/${this.state.campaign.camp_id}`, {
+                    method: "PUT",
+                    headers: {"Content-Type" : "application/json"},
+                    body: JSON.stringify(body)
+                });
+            } catch (err) {
+                console.log(err.message)
+            }
+        }).then(async () =>{
+            try {
+                const active = await this.state.contract.methods.isCampaignActive(this.state.campaign.camp_id-1).call()
+                console.log(active)
+                const body = {isActive: active};
+                const response = await fetch(`http://localhost:5000/campaigns/finish/${this.state.campaign.camp_id}`, {
                     method: "PUT",
                     headers: {"Content-Type" : "application/json"},
                     body: JSON.stringify(body)
@@ -198,8 +250,6 @@ class App extends Component{
     donateERC = async (evt) =>{
         evt.preventDefault()
         const web3 = window.web3
-
-        
 
         const abi = IERC20.abi
 
@@ -217,8 +267,9 @@ class App extends Component{
             .then(async () =>{
                 try {
                     const raised = await this.state.contract.methods.getCampaign(this.state.campaign.camp_id-1).call()
-                    console.log(raised.receivedAmount)
-                    const body = {raised : raised.receivedAmount/(10**18)};
+                    const amount = raised.receivedAmount/(10**18)
+                    console.log(amount + " :amount")
+                    const body = {raised : amount};
                     const response = await fetch(`http://localhost:5000/campaigns/${this.state.campaign.camp_id}`, {
                         method: "PUT",
                         headers: {"Content-Type" : "application/json"},
@@ -228,6 +279,19 @@ class App extends Component{
                     // window.location = "/campaign/" + this.state.campaign.camp_id;
                 } catch (err) {
                     console.log(err.message);
+                }
+            }).then(async () =>{
+                try {
+                    const active = await this.state.contract.methods.isCampaignActive(this.state.campaign.camp_id-1).call()
+                    console.log(active)
+                    const body = {isActive: active};
+                    const response = await fetch(`http://localhost:5000/campaigns/finish/${this.state.campaign.camp_id}`, {
+                        method: "PUT",
+                        headers: {"Content-Type" : "application/json"},
+                        body: JSON.stringify(body)
+                    });
+                } catch (err) {
+                    console.log(err.message)
                 }
             }).then(async() =>{
                 const networkId = await web3.eth.net.getId();
@@ -266,6 +330,19 @@ class App extends Component{
                 // window.location = "/campaign/" + this.state.campaign.camp_id;
             } catch (err) {
                 console.log(err.message);
+            }
+        }).then(async () =>{
+            try {
+                const active = await this.state.contract.methods.isCampaignActive(this.state.campaign.camp_id-1).call()
+                console.log(active)
+                const body = {isActive: active};
+                const response = await fetch(`http://localhost:5000/campaigns/finish/${this.state.campaign.camp_id}`, {
+                    method: "PUT",
+                    headers: {"Content-Type" : "application/json"},
+                    body: JSON.stringify(body)
+                });
+            } catch (err) {
+                console.log(err.message)
             }
         }).then(async() =>{
             const networkId = await web3.eth.net.getId();

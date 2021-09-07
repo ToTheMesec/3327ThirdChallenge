@@ -11,11 +11,11 @@ app.use(express.json());
 
 //Routes
 
-//create a todo
+//create a campaign
 
 app.post("/create-campaign", async(req, res) => {
     try{
-
+        const { beneficiary } = req.body;
         const { title } = req.body;
         const { description } = req.body;
         const { email } = req.body;
@@ -26,8 +26,8 @@ app.post("/create-campaign", async(req, res) => {
         const { category } = req.body;
         const { url } = req.body
         const newCamp = await pool.query(
-            "INSERT INTO campaigns (camp_title, camp_description, camp_email, camp_url, camp_dateCreated, camp_deadline, camp_goal, camp_currency, camp_category) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *", 
-            [title, description, email, url, date, deadline, goal, currency, category]
+            "INSERT INTO campaigns (camp_beneficiary ,camp_title, camp_description, camp_email, camp_url, camp_dateCreated, camp_deadline, camp_goal, camp_currency, camp_category) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING *", 
+            [beneficiary,title, description, email, url, date, deadline, goal, currency, category]
         );
 
         console.log(res.json(newCamp.rows[0]));
@@ -92,6 +92,32 @@ app.put("/campaigns/layer2/:id", async(req, res) =>{
         console.log(err.message)
     }
 })
+
+app.put("/campaigns/finish/:id", async(req, res) => {
+    try {
+        const {id} = req.params;
+        const {isActive} = req.body;
+        const finish = await pool.query(
+            "UPDATE campaigns SET camp_isActive = $1 WHERE camp_id = $2",
+            [isActive, id]
+        )
+    } catch (err) {
+        console.log(err.message)
+    }
+})
+
+app.put("/campaigns/withdraw/:id", async(req, res) => {
+    try {
+        const { id } = req.params;
+        const { withdrawn } = req.body;
+        const withdraw = await pool.query(
+            "UPDATE campaigns SET camp_withdraw = $1 WHERE camp_id = $2",
+            [withdrawn, id]
+        );
+    } catch (err) {
+        console.log(error.message)
+    }
+}) 
 
 app.listen(5000, () => {
     console.log("Server has started on port 5000");

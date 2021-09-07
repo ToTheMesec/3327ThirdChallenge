@@ -1,5 +1,6 @@
 CREATE TABLE campaigns(
     camp_id SERIAL PRIMARY KEY,
+    camp_beneficiary VARCHAR(100) NOT NULL,
     camp_title VARCHAR(255) NOT NULL,
     camp_description VARCHAR(5000) NOT NULL,
     camp_email VARCHAR(150) NOT NULL,
@@ -11,5 +12,6 @@ CREATE TABLE campaigns(
     camp_category VARCHAR(30) NOT NULL,
     camp_raised FLOAT(19) DEFAULT 0,
     camp_l2Raised FLOAT(19) DEFAULT 0,
-    camp_withdraw BOOLEAN DEFAULT false
+    camp_withdraw BOOLEAN DEFAULT false,
+    camp_isActive BOOLEAN DEFAULT true
 );

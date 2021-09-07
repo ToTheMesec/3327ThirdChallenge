@@ -153,6 +153,7 @@ class InputCampaign extends Component{
         .then( async () => {
                 try {
                 const body = {
+                    beneficiary: this.state.account,
                     title: this.state.title,
                     description: this.state.description, 
                     email: this.state.email, 
